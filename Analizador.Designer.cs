@@ -76,6 +76,7 @@ namespace AnalizadorLexico
             // rtxtCodigo
             // 
             this.rtxtCodigo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtxtCodigo.BulletIndent = 2;
             this.rtxtCodigo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtxtCodigo.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtxtCodigo.Location = new System.Drawing.Point(46, 6);
@@ -145,18 +146,21 @@ namespace AnalizadorLexico
             this.cargarProgramaToolStripMenuItem.Name = "cargarProgramaToolStripMenuItem";
             this.cargarProgramaToolStripMenuItem.Size = new System.Drawing.Size(109, 20);
             this.cargarProgramaToolStripMenuItem.Text = "Cargar programa";
+            this.cargarProgramaToolStripMenuItem.Click += new System.EventHandler(this.cargarProgramaToolStripMenuItem_Click);
             // 
             // guardarProgramaToolStripMenuItem
             // 
             this.guardarProgramaToolStripMenuItem.Name = "guardarProgramaToolStripMenuItem";
             this.guardarProgramaToolStripMenuItem.Size = new System.Drawing.Size(116, 20);
             this.guardarProgramaToolStripMenuItem.Text = "Guardar programa";
+            this.guardarProgramaToolStripMenuItem.Click += new System.EventHandler(this.guardarProgramaToolStripMenuItem_Click);
             // 
             // iniciarAnalisisToolStripMenuItem
             // 
             this.iniciarAnalisisToolStripMenuItem.Name = "iniciarAnalisisToolStripMenuItem";
             this.iniciarAnalisisToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
             this.iniciarAnalisisToolStripMenuItem.Text = "Iniciar analisis";
+            this.iniciarAnalisisToolStripMenuItem.Click += new System.EventHandler(this.iniciarAnalisisToolStripMenuItem_Click);
             // 
             // Analizador
             // 

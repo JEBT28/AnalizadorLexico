@@ -12,8 +12,12 @@ namespace AnalizadorLexico
 {
     public partial class Analizador : Form
     {
+
+        Automata miAutomata;
         public Analizador()
         {
+            miAutomata = new Automata();
+
             InitializeComponent();
         }
 
@@ -23,6 +27,7 @@ namespace AnalizadorLexico
             rtxtCodigo.Select();
             AddLineNumbers();
         }
+        #region Funcionalidad de la caja de texto para escribir codigo
         public int getWidth()
         {
             int w = 25;
@@ -110,6 +115,42 @@ namespace AnalizadorLexico
         {
             rtxtCodigo.Select();
             rtxtLineNumber.DeselectAll();
+        }
+
+        #endregion
+
+        private void iniciarAnalisisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            miAutomata.ProximoEstado = 0;
+            string cadena = rtxtCodigo.Text;
+            String tokens = "";
+
+            foreach (char caracter in cadena)
+            {
+               string result =  miAutomata.RecorridoMatriz(caracter);
+
+                if (result == "SL")
+                {
+                    tokens += "\n";
+                }
+                else if (result != "")
+                {
+                    miAutomata.ProximoEstado = 0;
+                    tokens += result+" ";
+                }
+            }
+
+            rtxtTokens.Text = tokens;
+        }
+
+        private void guardarProgramaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cargarProgramaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
