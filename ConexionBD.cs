@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace AnalizadorLexico
 {
@@ -18,13 +15,14 @@ namespace AnalizadorLexico
 
         SqlDataReader dr;
 
-        void AbrirConexion() {
+        void AbrirConexion()
+        {
 
 
             if (!(con.State == ConnectionState.Open))
             {
                 con.Open();
-            }      
+            }
         }
 
         void CerrarConexion()
@@ -36,10 +34,10 @@ namespace AnalizadorLexico
         }
 
 
-        public (String[,],List<ColumnaMatriz>) obtenerMatriz()
+        public (String[,], List<ColumnaMatriz>) obtenerMatriz()
         {
             List<ColumnaMatriz> colMatriz = new List<ColumnaMatriz>();
-            string[,] matriz = new string[215, 99];
+            string[,] matriz = new string[226, 99];
             try
             {
                 AbrirConexion();
@@ -52,7 +50,8 @@ namespace AnalizadorLexico
                 var columnas = dt.Columns;
                 var filas = dt.Rows;
 
-                columnas.Remove(columnas[0]);
+
+
                 foreach (DataColumn c in columnas)
                 {
                     if (c.ColumnName.Contains("NUM"))
@@ -65,39 +64,74 @@ namespace AnalizadorLexico
                     }
                     else if (c.ColumnName.Equals("CM"))
                     {
-                        colMatriz.Add(new ColumnaMatriz { Simbolo = ",", NumeroColumna = c.Ordinal });
+                        colMatriz.Add(new ColumnaMatriz { Simbolo = ".", NumeroColumna = c.Ordinal });
                     }
                     else if (new Regex(@"([A-ZÑ]{1}[1])").IsMatch(c.ColumnName))
                     {
-                        colMatriz.Add(new ColumnaMatriz { Simbolo = c.ColumnName.Substring(0, 1), NumeroColumna = c.Ordinal  });
+                        colMatriz.Add(new ColumnaMatriz { Simbolo = c.ColumnName.Substring(0, 1), NumeroColumna = c.Ordinal });
+                    }
+                    else if (new Regex(@"([a-zñ]{1})").IsMatch(c.ColumnName))
+                    {
+                        colMatriz.Add(new ColumnaMatriz { Simbolo = c.ColumnName.Substring(0, 1), NumeroColumna = c.Ordinal });
                     }
                     else
                     {
-                        colMatriz.Add(new ColumnaMatriz { Simbolo = c.ColumnName.Trim(), NumeroColumna = c.Ordinal  });
+                        colMatriz.Add(new ColumnaMatriz { Simbolo = c.ColumnName.Trim(), NumeroColumna = c.Ordinal });
                     }
                 }
 
 
                 for (int i = 0; i < filas.Count; i++)
                 {
-                    for (int j = 1; j < filas[i].ItemArray.Length; j++)
+                    for (int j = 0; j < filas[i].ItemArray.Length; j++)
                     {
-
-                        var valor = filas[i].ItemArray[j] is null ? "" : filas[i].ItemArray[j].ToString();
-                        matriz[i, j] = valor; 
+                        var valor = String.IsNullOrWhiteSpace(filas[i].ItemArray[j].ToString()) ? "" : filas[i].ItemArray[j].ToString();
+                        matriz[i, j] = valor;
                     }
                 }
             }
             catch (SqlException SQLe)
             {
-                System.Windows.Forms.MessageBox.Show(SQLe.Message,"Ocurrio un error");
+                System.Windows.Forms.MessageBox.Show(SQLe.Message, "Ocurrio un error");
             }
             finally
             {
                 CerrarConexion();
             }
 
-            return (matriz,colMatriz);
+            return (matriz, colMatriz);
+        }
+
+
+        public List<Error> obtenerErrores()
+        {
+            List<Error> errores = new List<Error>();
+            try
+            {
+                AbrirConexion();
+
+                String query = "SELECT * FROM ERRORES;";
+
+                DataTable dt = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+                da.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    errores.Add(new Error { Codigo = row["Error"].ToString(), Descripcion = row["Descripcion"].ToString() });
+                }
+
+            }
+            catch (SqlException SQLe)
+            {
+                System.Windows.Forms.MessageBox.Show(SQLe.Message, "Ocurrio un error");
+            }
+            finally
+            {
+                CerrarConexion();
+            }
+
+            return errores;
         }
     }
 }
