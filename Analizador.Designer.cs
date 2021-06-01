@@ -44,8 +44,10 @@ namespace AnalizadorLexico
             this.dgvTablaCN = new System.Windows.Forms.DataGridView();
             this.rtxtTokens = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.NuevoProgramatoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cargarProgramaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guardarProgramaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.guardarComoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iniciarAnalisisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlTokens = new System.Windows.Forms.Panel();
             this.rtxtNumeracionTokens = new System.Windows.Forms.RichTextBox();
@@ -85,6 +87,9 @@ namespace AnalizadorLexico
             // 
             // pnlEditor
             // 
+            this.pnlEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlEditor.BackColor = System.Drawing.Color.White;
             this.pnlEditor.Controls.Add(this.rtxtCodigo);
             this.pnlEditor.Controls.Add(this.rtxtNumeracionCodigo);
@@ -97,21 +102,24 @@ namespace AnalizadorLexico
             // rtxtCodigo
             // 
             this.rtxtCodigo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtxtCodigo.Dock = System.Windows.Forms.DockStyle.Right;
+            this.rtxtCodigo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtxtCodigo.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtxtCodigo.Location = new System.Drawing.Point(51, 6);
+            this.rtxtCodigo.Location = new System.Drawing.Point(46, 6);
             this.rtxtCodigo.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.rtxtCodigo.Name = "rtxtCodigo";
-            this.rtxtCodigo.Size = new System.Drawing.Size(759, 431);
+            this.rtxtCodigo.Size = new System.Drawing.Size(764, 431);
             this.rtxtCodigo.TabIndex = 1;
             this.rtxtCodigo.Text = "";
             this.rtxtCodigo.SelectionChanged += new System.EventHandler(this.rtxtCodigo_SelectionChanged);
             this.rtxtCodigo.VScroll += new System.EventHandler(this.rtxtCodigo_VScroll);
             this.rtxtCodigo.FontChanged += new System.EventHandler(this.rtxtCodigo_FontChanged);
             this.rtxtCodigo.TextChanged += new System.EventHandler(this.rtxtCodigo_TextChanged);
+            this.rtxtCodigo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.rtxtCodigo_KeyPress);
             // 
             // tabSalidas
             // 
+            this.tabSalidas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabSalidas.Controls.Add(this.tpgSalida);
             this.tabSalidas.Controls.Add(this.tpgErrores);
             this.tabSalidas.Controls.Add(this.tpgId);
@@ -230,14 +238,24 @@ namespace AnalizadorLexico
             // 
             this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.NuevoProgramatoolStripMenuItem,
             this.cargarProgramaToolStripMenuItem,
             this.guardarProgramaToolStripMenuItem,
+            this.guardarComoToolStripMenuItem,
             this.iniciarAnalisisToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1316, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "Guardar como";
+            // 
+            // NuevoProgramatoolStripMenuItem
+            // 
+            this.NuevoProgramatoolStripMenuItem.Image = global::AnalizadorLexico.Properties.Resources._066_plus;
+            this.NuevoProgramatoolStripMenuItem.Name = "NuevoProgramatoolStripMenuItem";
+            this.NuevoProgramatoolStripMenuItem.Size = new System.Drawing.Size(125, 20);
+            this.NuevoProgramatoolStripMenuItem.Text = "Nuevo programa";
+            this.NuevoProgramatoolStripMenuItem.Click += new System.EventHandler(this.NuevoProgramatoolStripMenuItem_Click);
             // 
             // cargarProgramaToolStripMenuItem
             // 
@@ -255,6 +273,13 @@ namespace AnalizadorLexico
             this.guardarProgramaToolStripMenuItem.Text = "Guardar programa";
             this.guardarProgramaToolStripMenuItem.Click += new System.EventHandler(this.guardarProgramaToolStripMenuItem_Click);
             // 
+            // guardarComoToolStripMenuItem
+            // 
+            this.guardarComoToolStripMenuItem.Name = "guardarComoToolStripMenuItem";
+            this.guardarComoToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
+            this.guardarComoToolStripMenuItem.Text = "Guardar como...";
+            this.guardarComoToolStripMenuItem.Click += new System.EventHandler(this.guardarComoToolStripMenuItem_Click);
+            // 
             // iniciarAnalisisToolStripMenuItem
             // 
             this.iniciarAnalisisToolStripMenuItem.Image = global::AnalizadorLexico.Properties.Resources.start;
@@ -265,6 +290,8 @@ namespace AnalizadorLexico
             // 
             // pnlTokens
             // 
+            this.pnlTokens.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTokens.BackColor = System.Drawing.Color.White;
             this.pnlTokens.Controls.Add(this.rtxtNumeracionTokens);
             this.pnlTokens.Controls.Add(this.rtxtTokens);
@@ -300,6 +327,7 @@ namespace AnalizadorLexico
             // 
             // btnGuardarArchivoTokens
             // 
+            this.btnGuardarArchivoTokens.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGuardarArchivoTokens.BackColor = System.Drawing.Color.RoyalBlue;
             this.btnGuardarArchivoTokens.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnGuardarArchivoTokens.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -323,7 +351,9 @@ namespace AnalizadorLexico
             this.Controls.Add(this.tabSalidas);
             this.Controls.Add(this.pnlEditor);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(1332, 666);
             this.Name = "Analizador";
             this.Text = "Analizador Lexico";
             this.Load += new System.EventHandler(this.Analizador_Load);
@@ -370,6 +400,8 @@ namespace AnalizadorLexico
         private System.Windows.Forms.DataGridView dgvTablaCN;
         private System.Windows.Forms.Button btnGuardarArchivoTokens;
         private System.Windows.Forms.SaveFileDialog sfdTokens;
+        private System.Windows.Forms.ToolStripMenuItem NuevoProgramatoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem guardarComoToolStripMenuItem;
     }
 }
 

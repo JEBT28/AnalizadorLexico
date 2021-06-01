@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AnalizadorLexico
@@ -8,13 +9,12 @@ namespace AnalizadorLexico
     public partial class Analizador : Form
     {
 
+        string rutaArchivo=@"";
         Automata miAutomata;
 
         List<Error> erroresEncontrados;
         public Analizador()
         {
-
-
             InitializeComponent();
             miAutomata = new Automata();
         }
@@ -143,12 +143,7 @@ namespace AnalizadorLexico
         private void iniciarAnalisisToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Declaracion de variables auxiliares 
-            int fila = 1;
-            int columna = 1;
-            int auxColumna = 0;
-            string cadena = rtxtCodigo.Text;
-            string fragmentoEvaluado = "";
-            erroresEncontrados = new List<Error>();
+           
 
             //Reset de la informacion de los controles del form
             dgvListaErrores.Rows.Clear();
@@ -156,79 +151,92 @@ namespace AnalizadorLexico
             dgvTablaId.Rows.Clear();
             rtxtTokens.Text = "";
 
+            int fila = 1;
+            int columna = 1;
+            int auxColumna = 0;
+            string cadena = rtxtCodigo.Text;
+            string fragmentoEvaluado = "";
+            erroresEncontrados = new List<Error>();
 
             // inicilaizacion de propiedades del automata
             miAutomata.ProximoEstado = 0;
             miAutomata.TablaIdentificadores = new List<Identificador>();
             miAutomata.TablaConstantesNum = new List<ConstanteNumerica>();
 
-            //Recorrido de la cadena
-            foreach (char caracter in cadena)
+            try
             {
-                fragmentoEvaluado += caracter;
-
-                //Llamada metodo del automata que determina el recorrido de la matriz
-                string result = miAutomata.RecorridoMatriz(caracter);
-
-                //Evaluacion del token devuelto
-                //Token igual a salto de linea
-                if (result == "SL")
+                //Recorrido de la cadena
+                foreach (char caracter in cadena)
                 {
-                    columna = 0;
+                    fragmentoEvaluado += caracter;
 
-                    fila++;
-                    AgregarToken("\n", Color.Black);
+                    //Llamada metodo del automata que determina el recorrido de la matriz
+                    string result = miAutomata.RealizarMovimiento(caracter);
 
-                    fragmentoEvaluado = "";
-                }
-                //Token existente devuelto
-                else if (result != "")
-                {
-                    auxColumna++;
-
-                    miAutomata.ProximoEstado = 0;
-                    //El token es un error
-                    if (result.Contains("ERROR"))
+                    //Evaluacion del token devuelto
+                    //Token igual a salto de linea
+                    if (result == "SL")
                     {
-                        AgregarToken(result + " ", Color.Red);
+                        columna = 0;
 
-                        Error nuevoError = miAutomata.IdentificarError(result);
+                        fila++;
+                        AgregarToken("\n", Color.Black);
 
-                        nuevoError.Linea = fila;
-                        nuevoError.Columna = columna;
-
-                        erroresEncontrados.Add(nuevoError);
+                        fragmentoEvaluado = "";
                     }
-                    //El token es un identificador
-                    else if (result.Contains("ID"))
+                    //Token existente devuelto
+                    else if (result != "")
                     {
-                        result += miAutomata.ValidarIdentificador(fragmentoEvaluado);
+                        auxColumna++;
 
-                        AgregarToken(result + " ", Color.Black);
-                    }
-                    //El token es una constante numerica
-                    else if (result.Contains("CN"))
-                    {
-                        result += miAutomata.ValidarConstanteNumerica(fragmentoEvaluado);
+                        miAutomata.ProximoEstado = 0;
+                        //El token es un error
+                        if (result.Contains("ERROR"))
+                        {
+                            AgregarToken(result + " ", Color.Red);
 
-                        AgregarToken(result + " ", Color.Black);
+                            Error nuevoError = miAutomata.IdentificarError(result);
+
+                            nuevoError.Linea = fila;
+                            nuevoError.Columna = columna;
+
+                            erroresEncontrados.Add(nuevoError);
+                        }
+                        //El token es un identificador
+                        else if (result.Contains("ID"))
+                        {
+                            result += miAutomata.ValidarIdentificador(fragmentoEvaluado);
+
+                            AgregarToken(result + " ", Color.Black);
+                        }
+                        //El token es una constante numerica
+                        else if (result.Contains("CN"))
+                        {
+                            result += miAutomata.ValidarConstanteNumerica(fragmentoEvaluado);
+
+                            AgregarToken(result + " ", Color.Black);
+                        }
+                        //El token es una palabra reservada o algun tipo de operador
+                        else
+                        {
+                            AgregarToken(result + " ", Color.Black);
+                        }
+
+                        AddLineNumbers(rtxtTokens, rtxtNumeracionTokens);
+                        columna += auxColumna;
+                        auxColumna = 0;
+                        fragmentoEvaluado = "";
                     }
-                    //El token es una palabra reservada o algun tipo de operador
+                    //No devolvio un token
                     else
                     {
-                        AgregarToken(result + " ", Color.Black);
+                        auxColumna++;
                     }
-
-                    AddLineNumbers(rtxtTokens, rtxtNumeracionTokens);
-                    columna += auxColumna;
-                    auxColumna = 0;
-                    fragmentoEvaluado = "";
                 }
-                //No devolvio un token
-                else
-                {
-                    auxColumna++;
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Ocurrio un error durante el recorrido de la cadena",MessageBoxButtons.OK,MessageBoxIcon.Warning);
             }
 
             //Rutina que muestra los errores que fueron identificados durante el analisis
@@ -242,6 +250,8 @@ namespace AnalizadorLexico
 
                 tpgErrores.Text = $"Lista de errores ({erroresEncontrados.Count} encontrados)";
                 rtxtSalida.Text = "El analizador termino la tarea y encontro errores, vea la lista de errores para mas información.";
+                dgvListaErrores.AutoResizeColumns();
+
             }
             else
             {
@@ -273,27 +283,24 @@ namespace AnalizadorLexico
 
             rtxtTokens.AppendText(token);
 
-
             rtxtTokens.Select(startIndex, length);
 
-
             rtxtTokens.SelectionColor = color;
-
         }
 
 
         //Metodo que guarda el codigo escrito
         private void guardarProgramaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            sfdCodigo.Title = "Elige el lugar donde guardar el archivo.";
-            sfdCodigo.InitialDirectory = @"C:\Users\%username%\Desktop\";
-            sfdCodigo.Filter = "Archivos RTF | *.rtf";
-            if (sfdCodigo.ShowDialog() == DialogResult.OK)
+         
+            if (string.IsNullOrWhiteSpace(rutaArchivo.Trim()))
             {
-                rtxtCodigo.SaveFile(sfdCodigo.FileName);
+                guardarComoToolStripMenuItem_Click(sender, e);
             }
-
-
+            else
+            {
+                rtxtCodigo.SaveFile(rutaArchivo);
+            }
         }
         
         //Metodo que carga el codigo guardado en un archivo 
@@ -304,10 +311,12 @@ namespace AnalizadorLexico
             ofdCodigo.Filter = "Archivos RTF | *.rtf";
             if (ofdCodigo.ShowDialog() == DialogResult.OK)
             {
-                rtxtCodigo.LoadFile(ofdCodigo.FileName);
+                rutaArchivo = ofdCodigo.FileName;
+                rtxtCodigo.LoadFile(rutaArchivo);
             }
             AddLineNumbers(rtxtCodigo, rtxtNumeracionCodigo);
         }
+
         //Metodo que guarda el archivo de tokens
         private void btnGuardarArchivoTokens_Click(object sender, EventArgs e)
         {
@@ -317,6 +326,52 @@ namespace AnalizadorLexico
             if (sfdTokens.ShowDialog() == DialogResult.OK)
             {
                 rtxtTokens.SaveFile(sfdTokens.FileName);
+            }
+            else
+            {
+                MessageBox.Show("Se cancelo la operacion", "Atencion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void rtxtCodigo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (new Regex(@"[a-zA-Z0-9\s\-\báéíóü;:.,ñÑ#$&-_+*'/{}()¿?¡!"+$"{'"'}]").IsMatch(e.KeyChar.ToString())|| e.KeyChar.Equals('|'))
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void NuevoProgramatoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool nuevoArchivo = true;
+
+            if (rtxtCodigo.Text.Length != 0)
+            {
+                nuevoArchivo = MessageBox.Show("¿Desea crear un nuevo archivo y descartar el actual?","Confirmacion",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)==DialogResult.Yes?true:false;
+            }
+
+            if (nuevoArchivo) {
+                rtxtCodigo.Text = "";
+            }
+        }
+
+        private void guardarComoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            sfdCodigo.Title = "Elige el lugar donde guardar el archivo.";
+            sfdCodigo.InitialDirectory = @"C:\Users\%username%\Desktop\";
+            sfdCodigo.Filter = "Archivos RTF | *.rtf";
+            if (sfdCodigo.ShowDialog() == DialogResult.OK)
+            {
+                rutaArchivo = sfdCodigo.FileName;
+                rtxtCodigo.SaveFile(sfdCodigo.FileName);
+            }
+            else
+            {
+                MessageBox.Show("Se cancelo la operacion", "Atencion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

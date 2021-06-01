@@ -73,6 +73,16 @@ namespace AnalizadorLexico.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _066_plus {
+            get {
+                object obj = ResourceManager.GetObject("066-plus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _090_upload {
             get {
                 object obj = ResourceManager.GetObject("_090_upload", resourceCulture);

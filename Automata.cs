@@ -29,14 +29,16 @@ namespace AnalizadorLexico
         public List<Identificador> TablaIdentificadores { get; set; }
         public List<ConstanteNumerica> TablaConstantesNum { get; set; }
 
+
         //Funcion que devuelve el token de la categoria segun el recorrido que vaya haciendo de la matriz, puede devolver un token, token vacio, un salto de linea 
-        public string RecorridoMatriz(char caracter)
+        public string RealizarMovimiento(char caracter)
         {
             Regex saltoLinea = new Regex(@"[\n]");
+            
             EstadoActual = ProximoEstado;
-            Debug.Write(EstadoActual + " - ");
-            int columnaCategoria = ColumnasMatriz.Count - 1;
+            
 
+            int columnaCategoria = ColumnasMatriz.Count - 1;
 
             if (saltoLinea.IsMatch(caracter.ToString()))
             {
@@ -48,7 +50,15 @@ namespace AnalizadorLexico
                 // Se determina la columna de la matriz que coincida con el caracter leido
                 int columna = ValidarCaracter(caracter);
                 // Obtiene el estado proximo
-                ProximoEstado = int.Parse(MatrizTransiciones[EstadoActual, columna].Trim());
+                if (columna == -1)
+                {
+                    ProximoEstado = 210;
+                }
+                else
+                {
+                    ProximoEstado = int.Parse(MatrizTransiciones[EstadoActual, columna].Trim());
+                }
+                
                 // Regresa el token que se establezca en la columna categoria del proximo estado
                 return MatrizTransiciones[ProximoEstado, columnaCategoria];
             }
@@ -75,7 +85,7 @@ namespace AnalizadorLexico
             Error errorIdentificado = new Error { Codigo = error };
             if (ErroresLenguaje.Contains(errorIdentificado))
             {
-                errorIdentificado = ErroresLenguaje.ElementAt(ErroresLenguaje.IndexOf(errorIdentificado));
+                errorIdentificado.Descripcion = ErroresLenguaje.ElementAt(ErroresLenguaje.IndexOf(errorIdentificado)).Descripcion;
             }
             else
             {
