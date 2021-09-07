@@ -43,7 +43,7 @@ namespace AnalizadorLexico
 
                     for (int y = 1; y < filaActual.Length; y++)
                     {
-                        var valor = String.IsNullOrWhiteSpace(filaActual[y]) ? "" : filaActual[y];
+                        var valor = String.IsNullOrWhiteSpace(filaActual[y]) ? "" : filaActual[y].Trim();
                         matriz[x-1, y-1] = valor;
                     }
                 }
