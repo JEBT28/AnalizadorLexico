@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -10,9 +11,9 @@ namespace AnalizadorLexico
         public Automata()
         {
             //Obtencion de la informacion de la base de datos cuando se inicializa en automata
-            (MatrizTransiciones, ColumnasMatriz) = new ConexionBD().obtenerMatriz();
+            (MatrizTransiciones, ColumnasMatriz) = new LeerCSV().obtenerMatriz();
 
-            ErroresLenguaje = new ConexionBD().obtenerErrores();
+            ErroresLenguaje = new LeerCSV().obtenerErrores();
 
         }
 

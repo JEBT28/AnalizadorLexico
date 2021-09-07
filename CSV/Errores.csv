@@ -1,0 +1,8 @@
+ERROR01,Se esperaba un simbolo diferente u otra terminacion.
+ERROR02,La constante numerica incluye simbolos ajenos a los permitidos.
+ERROR03,El operador logico indicado no existe.
+ERROR04,El operador aritmetico indicado no existe.
+ERROR05,El operador relacional indicado no existe.
+ERROR06,No existe una instrucción con la estructura indicada.
+ERROR07,El identificador no cumple con las reglas definidas.
+ERROR08,Se esperaba otro simbolo o fin para la cadena de texto
