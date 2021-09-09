@@ -8,7 +8,6 @@ namespace AnalizadorLexico
 {
     public partial class Analizador : Form
     {
-
         string rutaArchivo=@"";
         Automata miAutomata;
 

@@ -121,7 +121,6 @@ namespace AnalizadorLexico
             if (TablaConstantesNum.Contains(consNum))
             {
                 consNum = TablaConstantesNum.ElementAt(TablaConstantesNum.IndexOf(consNum));
-
             }
             else
             {

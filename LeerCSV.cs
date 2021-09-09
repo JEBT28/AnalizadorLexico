@@ -14,16 +14,12 @@ namespace AnalizadorLexico
 {
     class LeerCSV
     {
-
-
-
         public (String[,], List<ColumnaMatriz>) obtenerMatriz()
         {
             List<ColumnaMatriz> colMatriz = new List<ColumnaMatriz>();
             string[,] matriz = new string[0,0];
             try
             {
-
                 string[] filas = Properties.Resources.Matriz.Split('\n');
 
                 string[] encabezadosColumnas = filas[0].Split(',');
@@ -32,10 +28,9 @@ namespace AnalizadorLexico
 
                 for (int c = 1; c < encabezadosColumnas.Length; c++) {
 
-                    string simbolo = encabezadosColumnas[c];
+                    string simbolo = encabezadosColumnas[c];           
 
-                    colMatriz.Add(new ColumnaMatriz { NumeroColumna = c - 1, Simbolo = simbolo == "CM" ? "," : simbolo });
-                                                
+                    colMatriz.Add(new ColumnaMatriz { NumeroColumna = c - 1, Simbolo = simbolo == "CM" ? "," : simbolo });        
                 }
                 for (int x = 1; x < filas.Length; x++)
                 {
@@ -51,8 +46,7 @@ namespace AnalizadorLexico
             catch (Exception e)
             {
                 System.Windows.Forms.MessageBox.Show(e.Message, "Ocurrio un error");
-            }
-            
+            }            
 
             return (matriz, colMatriz);
         }
@@ -66,9 +60,8 @@ namespace AnalizadorLexico
                 for (int i = 0; i < filas.Length; i++)
                 {
                     string[] filaActual = filas[i].Split(',');
-                    errores.Add(new Error {Codigo=filaActual[0], Descripcion=filaActual[0] });
+                    errores.Add(new Error {Codigo=filaActual[0], Descripcion=filaActual[1] });
                 }
-
             }
             catch (Exception e)
             {
