@@ -1,4 +1,4 @@
-﻿
+
 namespace AnalizadorLexico
 {
     partial class Analizador
@@ -404,4 +404,3 @@ namespace AnalizadorLexico
         private System.Windows.Forms.ToolStripMenuItem guardarComoToolStripMenuItem;
     }
 }
-

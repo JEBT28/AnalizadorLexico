@@ -8,7 +8,7 @@ namespace AnalizadorLexico
 {
     public partial class Analizador : Form
     {
-        string rutaArchivo=@"";
+        string rutaArchivo = @"";
         Automata miAutomata;
 
         List<Error> erroresEncontrados;
@@ -51,7 +51,7 @@ namespace AnalizadorLexico
         public int getWidth()
         {
             int w = 25;
-            
+
             int line = rtxtCodigo.Lines.Length;
 
             if (line <= 99)
@@ -71,12 +71,12 @@ namespace AnalizadorLexico
         }
         public void AddLineNumbers(RichTextBox codigo, RichTextBox numeracion)
         {
-          
+
             Point pt = new Point(0, 0);
 
             int First_Index = codigo.GetCharIndexFromPosition(pt);
             int First_Line = codigo.GetLineFromCharIndex(First_Index);
-            
+
             pt.X = ClientRectangle.Width;
             pt.Y = ClientRectangle.Height;
 
@@ -84,10 +84,10 @@ namespace AnalizadorLexico
             int Last_Line = codigo.GetLineFromCharIndex(Last_Index);
 
             numeracion.SelectionAlignment = HorizontalAlignment.Center;
-            
+
             numeracion.Text = "";
             numeracion.Width = getWidth();
-            
+
             for (int i = First_Line; i <= Last_Line + 1; i++)
             {
                 numeracion.Text += i + 1 + "\n";
@@ -142,7 +142,7 @@ namespace AnalizadorLexico
         private void iniciarAnalisisToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Declaracion de variables auxiliares 
-           
+
 
             //Reset de la informacion de los controles del form
             dgvListaErrores.Rows.Clear();
@@ -235,7 +235,7 @@ namespace AnalizadorLexico
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Ocurrio un error durante el recorrido de la cadena",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Ocurrio un error durante el recorrido de la cadena", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             //Rutina que muestra los errores que fueron identificados durante el analisis
@@ -261,7 +261,7 @@ namespace AnalizadorLexico
             //Rutina que muestra la tabla de identificadores
             foreach (Identificador id in miAutomata.TablaIdentificadores)
             {
-                dgvTablaId.Rows.Add(id.Id.ToString("00"), id.Nombre,id.Tipo,id.Valor);
+                dgvTablaId.Rows.Add(id.Id.ToString("00"), id.Nombre, id.Tipo, id.Valor);
             }
 
             //Rutina que muestra la tabla de constantes numericas
@@ -291,7 +291,7 @@ namespace AnalizadorLexico
         //Metodo que guarda el codigo escrito
         private void guardarProgramaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-         
+
             if (string.IsNullOrWhiteSpace(rutaArchivo.Trim()))
             {
                 guardarComoToolStripMenuItem_Click(sender, e);
@@ -301,7 +301,7 @@ namespace AnalizadorLexico
                 rtxtCodigo.SaveFile(rutaArchivo);
             }
         }
-        
+
         //Metodo que carga el codigo guardado en un archivo 
         private void cargarProgramaToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -334,7 +334,7 @@ namespace AnalizadorLexico
 
         private void rtxtCodigo_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (new Regex(@"[a-zA-Z0-9\s\-\báéíóü;:.,ñÑ#$&-_+*'/{}()¿?¡!"+$"{'"'}]").IsMatch(e.KeyChar.ToString())|| e.KeyChar.Equals('|'))
+            if (new Regex(@"[a-zA-Z0-9\s\-\báéíóü;:.,ñÑ#$&-_+*'/{}()¿?¡!" + $"{'"'}]").IsMatch(e.KeyChar.ToString()) || e.KeyChar.Equals('|'))
             {
                 e.Handled = false;
             }
@@ -350,10 +350,11 @@ namespace AnalizadorLexico
 
             if (rtxtCodigo.Text.Length != 0)
             {
-                nuevoArchivo = MessageBox.Show("¿Desea crear un nuevo archivo y descartar el actual?","Confirmacion",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)==DialogResult.Yes?true:false;
+                nuevoArchivo = MessageBox.Show("¿Desea crear un nuevo archivo y descartar el actual?", "Confirmacion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ? true : false;
             }
 
-            if (nuevoArchivo) {
+            if (nuevoArchivo)
+            {
                 rtxtCodigo.Text = "";
             }
         }

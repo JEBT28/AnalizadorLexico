@@ -8,7 +8,7 @@ namespace AnalizadorLexico
 
         public string Valor { get; set; }
 
-        public int NumeroOperador{ get; set; }
+        public int NumeroOperador { get; set; }
 
         public int Jerarquia { get; set; }
 

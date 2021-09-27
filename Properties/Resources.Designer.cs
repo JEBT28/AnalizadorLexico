@@ -75,7 +75,7 @@ namespace AnalizadorLexico.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap _066_plus {
             get {
-                object obj = ResourceManager.GetObject("066-plus", resourceCulture);
+                object obj = ResourceManager.GetObject("_066_plus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -98,8 +98,7 @@ namespace AnalizadorLexico.Properties {
         ///ERROR05,El operador relacional indicado no existe.
         ///ERROR06,No existe una instrucción con la estructura indicada.
         ///ERROR07,El identificador no cumple con las reglas definidas.
-        ///ERROR08,Se esperaba otro simbolo o fin para la cadena de texto
-        ///.
+        ///ERROR08,Se esperaba otro simbolo o fin para la cadena de texto.
         /// </summary>
         internal static string Errores {
             get {
@@ -108,8 +107,8 @@ namespace AnalizadorLexico.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Estados,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,+,-,*,/,%,^,?,&lt;,=,&gt;,&amp;,|,ñ,Ñ,á,é,í,ó,ü,(,),#,&apos;,&quot;,$,¿,?,¡,!,{,},:,CM,.,;,FDC,Categoria
-        ///0,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,210,1,9,24,37,55,210,63,69,210,210,76,81,210,210,90,210,101,108,210,210,210,210,210,210,210,121,121,121,121,121,121,121,121,121,121,119,120,148,150,154,152,156,133,130,126,139,141,169,169, [resto de la cadena truncado]&quot;;.
+        ///   Busca una cadena traducida similar a Estados,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,+,-,*,/,%,^,?,&lt;,=,&gt;,&amp;,|,ñ,Ñ,á,é,í,ó,ü,(,),#,,&quot;&quot;&quot;&quot;,$,¿,?,¡,!,{,},:,CM,.,;,FDC,Categoria
+        ///0,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,210,1,9,24,37,55,210,63,69,210,210,76,81,210,210,90,210,101,108,210,210,210,210,210,210,210,121,121,121,121,121,121,121,121,121,121,119,120,148,150,154,152,156,133,130,126,139,141,169,16 [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string Matriz {
             get {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -11,9 +9,9 @@ namespace AnalizadorLexico
         public Automata()
         {
             //Obtencion de la informacion de la base de datos cuando se inicializa en automata
-            (MatrizTransiciones, ColumnasMatriz) = new LeerCSV().obtenerMatriz();
+            (MatrizTransiciones, ColumnasMatriz) = new LeerCSV().ObtenerMatriz();
 
-            ErroresLenguaje = new LeerCSV().obtenerErrores();
+            ErroresLenguaje = new LeerCSV().ObtenerErrores();
 
         }
 
@@ -35,9 +33,9 @@ namespace AnalizadorLexico
         public string RealizarMovimiento(char caracter)
         {
             Regex saltoLinea = new Regex(@"[\n]");
-            
+
             EstadoActual = ProximoEstado;
-            
+
 
             int columnaCategoria = ColumnasMatriz.Count - 1;
 
@@ -59,16 +57,16 @@ namespace AnalizadorLexico
                 {
                     ProximoEstado = int.Parse(MatrizTransiciones[EstadoActual, columna].Trim());
                 }
-                
+
                 // Regresa el token que se establezca en la columna categoria del proximo estado
                 return MatrizTransiciones[ProximoEstado, columnaCategoria];
             }
         }
-        
+
         //Funcion que valida el caracter leido y devuelve la columna con la que es afin
         public int ValidarCaracter(char caracter)
         {
-          
+
             if (new Regex(@"[\s]").IsMatch(caracter.ToString()))
             {
                 return ColumnasMatriz.ElementAt(ColumnasMatriz.FindIndex(cm => cm.Simbolo == "FDC")).NumeroColumna;
