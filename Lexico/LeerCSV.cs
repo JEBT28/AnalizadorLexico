@@ -1,17 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Data.SqlClient;
-using System.Data;
-using System.Drawing;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using System.Resources;
 
-namespace AnalizadorLexico
+namespace Compilador
 {
     class LeerCSV
     {
@@ -32,7 +22,7 @@ namespace AnalizadorLexico
 
                     string simbolo = encabezadosColumnas[c];
 
-                    colMatriz.Add(new ColumnaMatriz { NumeroColumna = c - 1, Simbolo = simbolo == "CM" ? "," : simbolo });
+                    colMatriz.Add(new ColumnaMatriz { NumeroColumna = c - 1, Simbolo = simbolo == "CM" ? "," : simbolo == "CS" ? "'": simbolo == "CD" ? "\"":simbolo });
                 }
                 for (int x = 1; x < filas.Length; x++)
                 {

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EAE4E7EA-075B-4534-B93F-3258B9FABF58}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>AnalizadorLexico</RootNamespace>
-    <AssemblyName>AnalizadorLexico</AssemblyName>
+    <RootNamespace>Compilador</RootNamespace>
+    <AssemblyName>Compilador</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -53,9 +53,12 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>AnalizadorLexico.Program</StartupObject>
+    <StartupObject>Compilador.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -72,22 +75,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analizador.cs">
+    <Compile Include="Lexico\Analizador.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Analizador.Designer.cs">
+    <Compile Include="Lexico\Analizador.Designer.cs">
       <DependentUpon>Analizador.cs</DependentUpon>
     </Compile>
-    <Compile Include="Automata.cs" />
-    <Compile Include="ColumnaMatriz.cs" />
-    <Compile Include="ConstanteNumerica.cs" />
-    <Compile Include="Error.cs" />
-    <Compile Include="ConexionBD.cs" />
-    <Compile Include="Identificador.cs" />
-    <Compile Include="LeerCSV.cs" />
+    <Compile Include="Lexico\Automata.cs" />
+    <Compile Include="Lexico\ColumnaMatriz.cs" />
+    <Compile Include="Lexico\ConstanteNumerica.cs" />
+    <Compile Include="Lexico\Error.cs" />
+    <Compile Include="Lexico\Identificador.cs" />
+    <Compile Include="Lexico\LeerCSV.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Analizador.resx">
+    <Compile Include="Sintactico\Sintactico.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sintactico\Sintactico.Designer.cs">
+      <DependentUpon>Sintactico.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Lexico\Analizador.resx">
       <DependentUpon>Analizador.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -95,6 +103,11 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Sintactico\Sintactico.resx">
+      <DependentUpon>Sintactico.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="ArchivosTemporales\ConstantesNumericas.json" />
+    <None Include="ArchivosTemporales\Identificadores.json" />
     <None Include="CSV\Errores.csv" />
     <None Include="CSV\Matriz.csv" />
     <None Include="packages.config" />
@@ -129,6 +142,9 @@
     <None Include="Resources\066-plus.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ArchivosTemporales\Tokens.txt">
+      <SubType>Form</SubType>
+    </Content>
     <Content Include="csharp.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -138,5 +154,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

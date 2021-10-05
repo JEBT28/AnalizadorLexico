@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
 
-namespace AnalizadorLexico
+namespace Compilador
 {
     public partial class Analizador : Form
     {
@@ -256,6 +259,14 @@ namespace AnalizadorLexico
             {
                 tpgErrores.Text = $"Lista de errores";
                 rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
+
+                string rutaBase = Directory.GetCurrentDirectory().Replace("bin\\Debug", "");
+                EscribirArchivosTemporales($"{rutaBase}ArchivosTemporales\\Tokens.txt", rtxtTokens.Text);
+
+                EscribirArchivosTemporales($"{rutaBase}ArchivosTemporales\\ConstantesNumericas.json", JsonConvert.SerializeObject(miAutomata.TablaConstantesNum));
+
+                EscribirArchivosTemporales($"{rutaBase}ArchivosTemporales\\Identificadores.json", JsonConvert.SerializeObject(miAutomata.TablaIdentificadores));
+
             }
 
             //Rutina que muestra la tabla de identificadores
@@ -271,11 +282,9 @@ namespace AnalizadorLexico
             }
         }
 
-
         //Metodo que agrega los tokens al archivo de tokens y define el color del texto segun su tipo
         private void AgregarToken(string token, Color color)
         {
-
             int startIndex = rtxtTokens.Text.Length == 0 ? 0 : rtxtTokens.Text.Length - 1;
 
             int length = token.Length;
@@ -291,7 +300,6 @@ namespace AnalizadorLexico
         //Metodo que guarda el codigo escrito
         private void guardarProgramaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             if (string.IsNullOrWhiteSpace(rutaArchivo.Trim()))
             {
                 guardarComoToolStripMenuItem_Click(sender, e);
@@ -373,6 +381,20 @@ namespace AnalizadorLexico
             {
                 MessageBox.Show("Se cancelo la operacion", "Atencion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        //Metodo que escribe en local los archivos que contienen informacion creada en el analizador lexico
+        private void EscribirArchivosTemporales(string ruta, string contenido) {
+
+            using (FileStream fileStream = new FileStream(ruta, FileMode.Create, FileAccess.ReadWrite))
+            {
+                StreamWriter streamWriter = new StreamWriter(fileStream);
+                streamWriter.Write(contenido);
+                streamWriter.Close();
+                fileStream.Close();
+            }
+
+
         }
     }
 }

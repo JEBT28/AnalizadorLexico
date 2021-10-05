@@ -1,5 +1,5 @@
 
-namespace AnalizadorLexico
+namespace Compilador
 {
     partial class Analizador
     {
@@ -251,7 +251,7 @@ namespace AnalizadorLexico
             // 
             // NuevoProgramatoolStripMenuItem
             // 
-            this.NuevoProgramatoolStripMenuItem.Image = global::AnalizadorLexico.Properties.Resources._066_plus;
+            this.NuevoProgramatoolStripMenuItem.Image = global::Compilador.Properties.Resources._066_plus;
             this.NuevoProgramatoolStripMenuItem.Name = "NuevoProgramatoolStripMenuItem";
             this.NuevoProgramatoolStripMenuItem.Size = new System.Drawing.Size(125, 20);
             this.NuevoProgramatoolStripMenuItem.Text = "Nuevo programa";
@@ -282,7 +282,7 @@ namespace AnalizadorLexico
             // 
             // iniciarAnalisisToolStripMenuItem
             // 
-            this.iniciarAnalisisToolStripMenuItem.Image = global::AnalizadorLexico.Properties.Resources.start;
+            this.iniciarAnalisisToolStripMenuItem.Image = global::Compilador.Properties.Resources.start;
             this.iniciarAnalisisToolStripMenuItem.Name = "iniciarAnalisisToolStripMenuItem";
             this.iniciarAnalisisToolStripMenuItem.Size = new System.Drawing.Size(108, 20);
             this.iniciarAnalisisToolStripMenuItem.Text = "Iniciar analisis";

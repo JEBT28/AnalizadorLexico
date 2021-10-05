@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace AnalizadorLexico
+namespace Compilador
 {
     class Automata
     {

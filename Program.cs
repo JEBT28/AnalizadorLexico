@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AnalizadorLexico
+namespace Compilador
 {
     static class Program
     {
