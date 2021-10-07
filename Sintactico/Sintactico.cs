@@ -139,13 +139,28 @@ namespace Compilador.Sintactico
 
             try {
 
+
                 miAnalizador.Recorrido(tokensEntrada);
+
+                string derivaciones = "";
+                foreach (var ent in miAnalizador.DerivacionesEntradas) {
+                    derivaciones += "------------------Entrada----------------------\n";
+                    derivaciones += $"{ent.Entrada}\n";
+                    derivaciones += "----------------Derivaciones-------------------\n";
+                    foreach (var der in ent.Derivaciones)
+                    {
+                        derivaciones += $"{der}\n";
+                    }
+                }
+                rtxtDerivaciones.Text = derivaciones;
+
+                tpErrores.Text = $"Lista de errores";
+                rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
 
             } catch(Exception ex) {
 
                 MessageBox.Show(ex.Message);
-            }
-            MessageBox.Show("Aceptado");
+            }           
         }
     }
 }

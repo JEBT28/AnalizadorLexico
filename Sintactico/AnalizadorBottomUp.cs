@@ -12,6 +12,7 @@ namespace Compilador.Sintactico
     {
         public AnalizadorBottomUp() {        
             this.Gramaticas = new LeerCSV().ObtenerGramaticas();
+            this.DerivacionesEntradas = new List<DerivacionEntrada>();
             foreach (var item in Gramaticas)
             {
                 Debug.WriteLine("Raiz: {0} | PilaValida: {1}",item.Raiz,item.PilaValida.ToString());
@@ -23,6 +24,8 @@ namespace Compilador.Sintactico
         public int CorrespondeciaLlaves { get; set; }
 
         public List<Gramatica> Gramaticas { get; set; }
+
+        public List<DerivacionEntrada>  DerivacionesEntradas{ get; set; }
 
         public void Recorrido(string[] tokens)
         {
@@ -36,9 +39,20 @@ namespace Compilador.Sintactico
 
                         RecorrerEntrada(entradaLinea: entrada);
 
-                        Debug.WriteLine(" aceptada");
+                        
                     }                    
                 }
+
+                if (CorrespondeciaLlaves != 0) {
+
+                    throw new Exception(message: "Se esperaba un "+(CorrespondeciaLlaves<0?"{":"}"));
+                }
+                if (CorrespondeciaParentesis != 0) {
+
+                    throw new Exception(message: "Se esperaba un " + (CorrespondeciaLlaves < 0 ? "(" : ")"));
+                }
+
+                Debug.WriteLine("aceptada");
             }
             catch(Exception ex)
             { 
@@ -52,7 +66,9 @@ namespace Compilador.Sintactico
 
             PilaEntrada.AddRange(entradaLinea);
 
-            List<string> Pila;     
+            List<string> Pila;
+
+            DerivacionEntrada entrada = new DerivacionEntrada(String.Join(" ", PilaEntrada));
 
             do
             {
@@ -62,24 +78,46 @@ namespace Compilador.Sintactico
                 Pila = new List<string>();
                 while(PilaEntrada.Count>0)
                 {                   
-                    string token = PilaEntrada.Last().Contains("ID") ? "ID" : PilaEntrada.Last().Contains("CN") ? "CN" : PilaEntrada.Last();                    
-                    Debug.WriteLine("Token ntes eliminacion pilaEntrada: " + token);
+                    string token = PilaEntrada.Last().Contains("ID") ? "ID" : PilaEntrada.Last().Contains("CN") ? "CN" : PilaEntrada.Last();
+
                     PilaEntrada.Remove(PilaEntrada.Last());
-                    Debug.WriteLine("Token ntes reduccion: " +token);
+
+                    switch (token) {
+                        case "CAES02": CorrespondeciaParentesis++;break;
+                        case "CAES13": CorrespondeciaParentesis--; break;
+                        case "CAES14": CorrespondeciaLlaves++; break;
+                        case "CAES15": CorrespondeciaLlaves--; break;
+                        default: break;
+                    }
+
                     Pila.Add(token);
+
                     Debug.WriteLine("Pila antes reduccion: " + String.Join(" ", Pila.Reverse<string>()));
+
+                    entrada.Derivaciones.Add(String.Join(" ", Pila.Reverse<string>()));
+
                     var resultado = Reduccion(Pila.ToArray());
+
 
                     if (!String.IsNullOrWhiteSpace(resultado))
                     {
                         Pila.Clear();
                         Pila.Add(resultado);
                     }
+                    else
+                    {
+                        if (PilaEntrada.Count == 0)
+                        {
+                            throw new Exception("Se esperaba otra terminacion la instruccion");
+                        }
+                    }
+                  
                 }
-
                 // Reversa                
                 PilaEntrada.AddRange(Pila.Reverse<String>());
             } while (Pila.First() != "S");
+            entrada.Derivaciones.Add("S");
+            DerivacionesEntradas.Add(entrada);
         }
 
         private string Reduccion(string[] Pila) {

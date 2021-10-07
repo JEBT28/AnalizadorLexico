@@ -90,6 +90,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sintactico\AnalizadorBottomUp.cs" />
+    <Compile Include="Sintactico\DerivacionEntrada.cs" />
+    <Compile Include="Sintactico\Error.cs" />
     <Compile Include="Sintactico\Gramatica.cs" />
     <Compile Include="Sintactico\Sintactico.cs">
       <SubType>Form</SubType>

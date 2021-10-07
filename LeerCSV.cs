@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Compilador.Sintactico;
+using Compilador.Lexico;
 
 namespace Compilador
 {
@@ -45,16 +46,16 @@ namespace Compilador
             return (matriz, colMatriz);
         }
 
-        public List<Error> ObtenerErrores()
+        public List<Compilador.Lexico.Error> ObtenerErrores()
         {
-            List<Error> errores = new List<Error>();
+            List<Compilador.Lexico.Error> errores = new List<Compilador.Lexico.Error>();
             try
             {
                 string[] filas = Properties.Resources.Errores.Split('\n');
                 for (int i = 0; i < filas.Length; i++)
                 {
                     string[] filaActual = filas[i].Split(',');
-                    errores.Add(new Error { Codigo = filaActual[0], Descripcion = filaActual[1] });
+                    errores.Add(new Compilador.Lexico.Error { Codigo = filaActual[0], Descripcion = filaActual[1] });
                 }
             }
             catch (Exception e)

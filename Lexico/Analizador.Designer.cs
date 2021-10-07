@@ -1,5 +1,5 @@
 
-namespace Compilador
+namespace Compilador.Lexico
 {
     partial class Analizador
     {

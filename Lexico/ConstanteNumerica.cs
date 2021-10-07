@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Compilador
+namespace Compilador.Lexico
 {
     class ConstanteNumerica : IEquatable<ConstanteNumerica>
     {
