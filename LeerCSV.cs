@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Compilador.Sintactico;
 
 namespace Compilador
 {
@@ -63,5 +65,30 @@ namespace Compilador
             return errores;
         }
 
+
+        public List<Gramatica> ObtenerGramaticas() {
+            List<Gramatica> gramaticas = new List<Gramatica>();
+
+            string[] gramaticasCSV = Properties.Resources.Gramaticas.Split('\n');
+
+            foreach (var g in gramaticasCSV)
+            {
+                string[] definicion = g.Split(',');
+
+                string raiz = definicion[0];
+
+                string expreg = "";
+                for (int i = 1; i < definicion.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(definicion[i])) {
+                        expreg+= definicion[i]+" ";
+                    }
+                }
+                                                                  
+                gramaticas.Add(new Gramatica( raiz,new Regex(expreg.Trim())));
+            }
+
+            return gramaticas;
+        }
     }
 }

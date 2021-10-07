@@ -13,7 +13,8 @@ namespace Compilador
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Analizador());
+            //Application.Run(new Analizador());
+            Application.Run(new Sintactico.Sintactico());
         }
     }
 }

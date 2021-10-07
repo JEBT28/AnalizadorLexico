@@ -86,9 +86,11 @@
     <Compile Include="Lexico\ConstanteNumerica.cs" />
     <Compile Include="Lexico\Error.cs" />
     <Compile Include="Lexico\Identificador.cs" />
-    <Compile Include="Lexico\LeerCSV.cs" />
+    <Compile Include="LeerCSV.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sintactico\AnalizadorBottomUp.cs" />
+    <Compile Include="Sintactico\Gramatica.cs" />
     <Compile Include="Sintactico\Sintactico.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +127,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Sintactico\Recursos\Gramaticas.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

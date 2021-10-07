@@ -107,7 +107,31 @@ namespace Compilador.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Estados,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,+,-,*,/,%,^,?,&lt;,=,&gt;,&amp;,|,ñ,Ñ,á,é,í,ó,ü,(,),#,,&quot;&quot;&quot;&quot;,$,¿,?,¡,!,{,},:,CM,.,;,FDC,Categoria
+        ///   Busca una cadena traducida similar a S,PR01,,,
+        ///S,PR02,,,
+        ///S,PR20,ID,OPAS,CA
+        ///S,PR17,ID,OPAS,CN
+        ///S,PR19,ID,OPAS,CN
+        ///S,PR20,ID,OPAS,PR22
+        ///EXP,OPAS,CA,,
+        ///EXP,OPAS,CN,,
+        ///EXP,OPAS,CA,,
+        ///EXP2,ID,OPRE,ID,
+        ///EXP2,CN,OPRE,CN,
+        ///EXP2,CA,OPRE,CA,
+        ///BOOL,PR22,,,
+        ///BOOL,PR23,,,
+        ///BOOL,EXP2,,,
+        ///.
+        /// </summary>
+        internal static string Gramaticas {
+            get {
+                return ResourceManager.GetString("Gramaticas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Estados,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,+,-,*,/,%,^,?,&lt;,=,&gt;,&amp;,|,ñ,Ñ,á,é,í,ó,ü,(,),#,CS,CD,$,¿,?,¡,!,{,},:,CM,.,;,FDC,Categoria
         ///0,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,117,210,1,9,24,37,55,210,63,69,210,210,76,81,210,210,90,210,101,108,210,210,230,210,210,210,210,121,121,121,121,121,121,121,121,121,121,119,120,148,150,154,152,156,133,130,126,139,141,169,16 [resto de la cadena truncado]&quot;;.
         /// </summary>
         internal static string Matriz {
@@ -127,7 +151,10 @@ namespace Compilador.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a .
+        ///   Busca una cadena traducida similar a 
+        ///
+        ///
+        ///PR21 ID01 OPAS CA2 .
         /// </summary>
         internal static string Tokens {
             get {
