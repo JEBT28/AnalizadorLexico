@@ -195,7 +195,7 @@ namespace Compilador.Sintactico
             {
                 //Si la gramatica es valida la recuperamos
                 var gramatica = Gramaticas.ElementAt(Gramaticas.IndexOf(new Gramatica(auxPila, new Regex(""))));
-            //Hacemos la reduccion    
+                //Hacemos la reduccion    
                 string pilaResultante = gramatica.PilaValida.Replace(auxPila, gramatica.Raiz);
                 
                 Debug.WriteLine(pilaResultante);
