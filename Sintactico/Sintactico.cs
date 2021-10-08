@@ -157,6 +157,7 @@ namespace Compilador.Sintactico
 
               
                 tpErrores.Text = $"Lista de errores";
+                dgvListaErrores.Rows.Clear();
                 rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
 
             }
@@ -190,9 +191,9 @@ namespace Compilador.Sintactico
         }
 
         private void volverALexicoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new Lexico.Analizador().Show(); 
+        {            
             this.Hide();
+            this.Dispose();
         }
 
     }

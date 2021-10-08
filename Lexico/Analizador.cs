@@ -341,7 +341,6 @@ namespace Compilador.Lexico
 
 
             new Sintactico.Sintactico().Show();
-            this.Hide();
 
 
         }
