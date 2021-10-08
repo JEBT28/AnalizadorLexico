@@ -53,8 +53,11 @@ namespace Compilador.Lexico
             this.rtxtNumeracionTokens = new System.Windows.Forms.RichTextBox();
             this.sfdCodigo = new System.Windows.Forms.SaveFileDialog();
             this.ofdCodigo = new System.Windows.Forms.OpenFileDialog();
-            this.btnGuardarArchivoTokens = new System.Windows.Forms.Button();
+            this.btnAnalisisSintactico = new System.Windows.Forms.Button();
             this.sfdTokens = new System.Windows.Forms.SaveFileDialog();
+            this.btnGuardarArchivoTokens = new System.Windows.Forms.Button();
+            this.btnAnalisisStx = new System.Windows.Forms.Button();
+            this.bToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlEditor.SuspendLayout();
             this.tabSalidas.SuspendLayout();
             this.tpgSalida.SuspendLayout();
@@ -237,12 +240,7 @@ namespace Compilador.Lexico
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.NuevoProgramatoolStripMenuItem,
-            this.cargarProgramaToolStripMenuItem,
-            this.guardarProgramaToolStripMenuItem,
-            this.guardarComoToolStripMenuItem,
-            this.iniciarAnalisisToolStripMenuItem});
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.NuevoProgramatoolStripMenuItem, this.cargarProgramaToolStripMenuItem, this.guardarProgramaToolStripMenuItem, this.guardarComoToolStripMenuItem, this.iniciarAnalisisToolStripMenuItem });
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1316, 24);
@@ -325,6 +323,21 @@ namespace Compilador.Lexico
             // 
             this.ofdCodigo.FileName = "openFileDialog1";
             // 
+            // btnAnalisisSintactico
+            // 
+            this.btnAnalisisSintactico.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAnalisisSintactico.BackColor = System.Drawing.Color.RoyalBlue;
+            this.btnAnalisisSintactico.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnAnalisisSintactico.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnAnalisisSintactico.ForeColor = System.Drawing.Color.White;
+            this.btnAnalisisSintactico.Location = new System.Drawing.Point(846, 504);
+            this.btnAnalisisSintactico.Name = "btnAnalisisSintactico";
+            this.btnAnalisisSintactico.Size = new System.Drawing.Size(458, 27);
+            this.btnAnalisisSintactico.TabIndex = 5;
+            this.btnAnalisisSintactico.Text = "Analisis sintactico";
+            this.btnAnalisisSintactico.UseVisualStyleBackColor = false;
+            this.btnAnalisisSintactico.Click += new System.EventHandler(this.btnAnalisisSintactico_Click);
+            // 
             // btnGuardarArchivoTokens
             // 
             this.btnGuardarArchivoTokens.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -336,9 +349,30 @@ namespace Compilador.Lexico
             this.btnGuardarArchivoTokens.Name = "btnGuardarArchivoTokens";
             this.btnGuardarArchivoTokens.Size = new System.Drawing.Size(458, 27);
             this.btnGuardarArchivoTokens.TabIndex = 5;
-            this.btnGuardarArchivoTokens.Text = "Guardar archivo de tokens";
+            this.btnGuardarArchivoTokens.Text = "Analisis sintactico";
             this.btnGuardarArchivoTokens.UseVisualStyleBackColor = false;
-            this.btnGuardarArchivoTokens.Click += new System.EventHandler(this.btnGuardarArchivoTokens_Click);
+            this.btnGuardarArchivoTokens.Click += new System.EventHandler(this.btnAnalisisSintactico_Click);
+            // 
+            // btnAnalisisStx
+            // 
+            this.btnAnalisisStx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAnalisisStx.BackColor = System.Drawing.Color.RoyalBlue;
+            this.btnAnalisisStx.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnAnalisisStx.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnAnalisisStx.ForeColor = System.Drawing.Color.White;
+            this.btnAnalisisStx.Location = new System.Drawing.Point(846, 504);
+            this.btnAnalisisStx.Name = "btnAnalisisStx";
+            this.btnAnalisisStx.Size = new System.Drawing.Size(458, 27);
+            this.btnAnalisisStx.TabIndex = 5;
+            this.btnAnalisisStx.Text = "Analisis sintactico";
+            this.btnAnalisisStx.UseVisualStyleBackColor = false;
+            this.btnAnalisisStx.Click += new System.EventHandler(this.btnAnalisisSintactico_Click);
+            // 
+            // bToolStripMenuItem
+            // 
+            this.bToolStripMenuItem.Name = "bToolStripMenuItem";
+            this.bToolStripMenuItem.Size = new System.Drawing.Size(26, 20);
+            this.bToolStripMenuItem.Text = "b";
             // 
             // Analizador
             // 
@@ -346,7 +380,7 @@ namespace Compilador.Lexico
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(1316, 627);
-            this.Controls.Add(this.btnGuardarArchivoTokens);
+            this.Controls.Add(this.btnAnalisisSintactico);
             this.Controls.Add(this.pnlTokens);
             this.Controls.Add(this.tabSalidas);
             this.Controls.Add(this.pnlEditor);
@@ -398,9 +432,12 @@ namespace Compilador.Lexico
         private System.Windows.Forms.DataGridView dgvTablaId;
         private System.Windows.Forms.TabPage tpgCN;
         private System.Windows.Forms.DataGridView dgvTablaCN;
-        private System.Windows.Forms.Button btnGuardarArchivoTokens;
+        private System.Windows.Forms.Button btnAnalisisSintactico;
         private System.Windows.Forms.SaveFileDialog sfdTokens;
         private System.Windows.Forms.ToolStripMenuItem NuevoProgramatoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem guardarComoToolStripMenuItem;
+        private System.Windows.Forms.Button btnGuardarArchivoTokens;
+        private System.Windows.Forms.Button btnAnalisisStx;
+        private System.Windows.Forms.ToolStripMenuItem bToolStripMenuItem;
     }
 }

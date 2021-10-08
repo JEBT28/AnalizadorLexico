@@ -32,8 +32,11 @@ namespace Compilador.Sintactico
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Sintactico));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpSalida = new System.Windows.Forms.TabPage();
+            this.rtxtSalida = new System.Windows.Forms.RichTextBox();
             this.tpErrores = new System.Windows.Forms.TabPage();
+            this.dgvListaErrores = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.volverALexicoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cargarArchivoDeTokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iniciarAnalisisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rtxtDerivaciones = new System.Windows.Forms.RichTextBox();
@@ -41,9 +44,10 @@ namespace Compilador.Sintactico
             this.pnlEditor = new System.Windows.Forms.Panel();
             this.rtxtTokens = new System.Windows.Forms.RichTextBox();
             this.rtxtNumeracionTokens = new System.Windows.Forms.RichTextBox();
-            this.rtxtSalida = new System.Windows.Forms.RichTextBox();
             this.tabControl1.SuspendLayout();
             this.tpSalida.SuspendLayout();
+            this.tpErrores.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvListaErrores)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.pnlEditor.SuspendLayout();
             this.SuspendLayout();
@@ -69,8 +73,21 @@ namespace Compilador.Sintactico
             this.tpSalida.Text = "Salida";
             this.tpSalida.UseVisualStyleBackColor = true;
             // 
+            // rtxtSalida
+            // 
+            this.rtxtSalida.BackColor = System.Drawing.Color.White;
+            this.rtxtSalida.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtxtSalida.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtxtSalida.Location = new System.Drawing.Point(3, 3);
+            this.rtxtSalida.Name = "rtxtSalida";
+            this.rtxtSalida.ReadOnly = true;
+            this.rtxtSalida.Size = new System.Drawing.Size(826, 90);
+            this.rtxtSalida.TabIndex = 1;
+            this.rtxtSalida.Text = "";
+            // 
             // tpErrores
             // 
+            this.tpErrores.Controls.Add(this.dgvListaErrores);
             this.tpErrores.Location = new System.Drawing.Point(4, 22);
             this.tpErrores.Name = "tpErrores";
             this.tpErrores.Padding = new System.Windows.Forms.Padding(3);
@@ -79,9 +96,22 @@ namespace Compilador.Sintactico
             this.tpErrores.Text = "Lista de errores";
             this.tpErrores.UseVisualStyleBackColor = true;
             // 
+            // dgvListaErrores
+            // 
+            this.dgvListaErrores.BackgroundColor = System.Drawing.Color.White;
+            this.dgvListaErrores.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvListaErrores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvListaErrores.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvListaErrores.Location = new System.Drawing.Point(3, 3);
+            this.dgvListaErrores.Name = "dgvListaErrores";
+            this.dgvListaErrores.RowHeadersVisible = false;
+            this.dgvListaErrores.Size = new System.Drawing.Size(826, 90);
+            this.dgvListaErrores.TabIndex = 1;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.volverALexicoToolStripMenuItem,
             this.cargarArchivoDeTokensToolStripMenuItem,
             this.iniciarAnalisisToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -89,6 +119,13 @@ namespace Compilador.Sintactico
             this.menuStrip1.Size = new System.Drawing.Size(1316, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // volverALexicoToolStripMenuItem
+            // 
+            this.volverALexicoToolStripMenuItem.Name = "volverALexicoToolStripMenuItem";
+            this.volverALexicoToolStripMenuItem.Size = new System.Drawing.Size(97, 20);
+            this.volverALexicoToolStripMenuItem.Text = "Volver a Lexico";
+            this.volverALexicoToolStripMenuItem.Click += new System.EventHandler(this.volverALexicoToolStripMenuItem_Click);
             // 
             // cargarArchivoDeTokensToolStripMenuItem
             // 
@@ -115,6 +152,7 @@ namespace Compilador.Sintactico
             this.rtxtDerivaciones.Size = new System.Drawing.Size(438, 443);
             this.rtxtDerivaciones.TabIndex = 3;
             this.rtxtDerivaciones.Text = "";
+            this.rtxtDerivaciones.MouseDown += new System.Windows.Forms.MouseEventHandler(this.rtxtLineNumber_MouseDown);
             // 
             // ofdTokens
             // 
@@ -145,6 +183,9 @@ namespace Compilador.Sintactico
             this.rtxtTokens.Size = new System.Drawing.Size(764, 431);
             this.rtxtTokens.TabIndex = 1;
             this.rtxtTokens.Text = "";
+            this.rtxtTokens.SelectionChanged += new System.EventHandler(this.rtxtTokens_SelectionChanged);
+            this.rtxtTokens.VScroll += new System.EventHandler(this.rtxtTokens_VScroll);
+            this.rtxtTokens.TextChanged += new System.EventHandler(this.rtxtTokens_FontChanged);
             // 
             // rtxtNumeracionTokens
             // 
@@ -161,18 +202,7 @@ namespace Compilador.Sintactico
             this.rtxtNumeracionTokens.Size = new System.Drawing.Size(40, 431);
             this.rtxtNumeracionTokens.TabIndex = 0;
             this.rtxtNumeracionTokens.Text = "";
-            // 
-            // rtxtSalida
-            // 
-            this.rtxtSalida.BackColor = System.Drawing.Color.White;
-            this.rtxtSalida.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtxtSalida.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtxtSalida.Location = new System.Drawing.Point(3, 3);
-            this.rtxtSalida.Name = "rtxtSalida";
-            this.rtxtSalida.ReadOnly = true;
-            this.rtxtSalida.Size = new System.Drawing.Size(826, 90);
-            this.rtxtSalida.TabIndex = 1;
-            this.rtxtSalida.Text = "";
+            this.rtxtNumeracionTokens.MouseDown += new System.Windows.Forms.MouseEventHandler(this.rtxtLineNumber_MouseDown);
             // 
             // Sintactico
             // 
@@ -191,6 +221,8 @@ namespace Compilador.Sintactico
             this.Load += new System.EventHandler(this.Sintactico_Load);
             this.tabControl1.ResumeLayout(false);
             this.tpSalida.ResumeLayout(false);
+            this.tpErrores.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvListaErrores)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlEditor.ResumeLayout(false);
@@ -213,5 +245,7 @@ namespace Compilador.Sintactico
         private System.Windows.Forms.RichTextBox rtxtTokens;
         private System.Windows.Forms.RichTextBox rtxtNumeracionTokens;
         private System.Windows.Forms.RichTextBox rtxtSalida;
+        private System.Windows.Forms.ToolStripMenuItem volverALexicoToolStripMenuItem;
+        private System.Windows.Forms.DataGridView dgvListaErrores;
     }
 }

@@ -324,25 +324,31 @@ namespace Compilador.Lexico
             AddLineNumbers(rtxtCodigo, rtxtNumeracionCodigo);
         }
 
-        //Metodo que guarda el archivo de tokens
-        private void btnGuardarArchivoTokens_Click(object sender, EventArgs e)
+        //Metodo que redirige al analizador sintactico
+        private void btnAnalisisSintactico_Click(object sender, EventArgs e)
         {
-            sfdTokens.Title = "Elige el lugar donde guardar el archivo de tokens.";
-            sfdTokens.InitialDirectory = @"C:\Users\%username%\Desktop\";
-            sfdTokens.Filter = "Archivos RTF | *.rtf";
-            if (sfdTokens.ShowDialog() == DialogResult.OK)
-            {
-                rtxtTokens.SaveFile(sfdTokens.FileName);
+            if (erroresEncontrados.Count > 0) {
+                MessageBox.Show("No se puede pasar al analizador sintactico porque contiene errores lexicos.","Atencion",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                return;
             }
-            else
+
+            if (String.IsNullOrWhiteSpace(rtxtCodigo.Text.Trim()))
             {
-                MessageBox.Show("Se cancelo la operacion", "Atencion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Nada que continuar analizando", "Atencion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
+
+
+
+            new Sintactico.Sintactico().Show();
+            this.Hide();
+
+
         }
 
         private void rtxtCodigo_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (new Regex(@"[a-zA-Z0-9\s\-\báéíóü;:.,ñÑ#$&-_+*'/{}()¿?¡!" + $"{'"'}]").IsMatch(e.KeyChar.ToString()) || e.KeyChar.Equals('|'))
+            if (new Regex(@"[a-zA-Z0-9\s\-\báéíóü;:.,ñÑ#$&-_+*%'/{}()¿?¡!" + $"{'"'}]").IsMatch(e.KeyChar.ToString()) || e.KeyChar.Equals('|'))
             {
                 e.Handled = false;
             }

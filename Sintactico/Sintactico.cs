@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,16 +13,27 @@ namespace Compilador.Sintactico
 {
     public partial class Sintactico : Form
     {
-        string rutaArchivo = @"";
+       
         AnalizadorBottomUp miAnalizador;
         public Sintactico()
         {
             InitializeComponent();
-        }
+        }       
 
         private void Sintactico_Load(object sender, EventArgs e)
         {
+            string rutaBase = Directory.GetCurrentDirectory().Replace("bin\\Debug", "");
+            System.IO.StreamReader sr = new System.IO.StreamReader($"{rutaBase}ArchivosTemporales\\Tokens.txt");
+            rtxtTokens.Text = sr.ReadToEnd();
+            sr.Close();
 
+            AddLineNumbers(rtxtTokens, rtxtNumeracionTokens);
+
+            dgvListaErrores.Columns.Add("Codigo", "Codigo");
+            dgvListaErrores.Columns.Add("Descripcion", "Descripción");
+            dgvListaErrores.Columns.Add("Linea", "Linea");
+            dgvListaErrores.ReadOnly = true;
+            dgvListaErrores.AllowUserToAddRows = false;
         }
         #region Enumeracion del textbox
         public int getWidth()
@@ -137,13 +149,33 @@ namespace Compilador.Sintactico
 
             miAnalizador = new AnalizadorBottomUp();
 
-            try {
+            try
+            {
 
 
                 miAnalizador.Recorrido(tokensEntrada);
 
+              
+                tpErrores.Text = $"Lista de errores";
+                rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
+
+            }
+            catch (Exception ex)
+            {
+                tpErrores.Text = $"Lista de errores: {miAnalizador.ErrorSintacticos.Count}.";
+                rtxtSalida.Text = "El analizador termino la tarea con errores.\nRevisar la pestaña de errores.";
+                dgvListaErrores.Rows.Clear();
+                foreach (var err in miAnalizador.ErrorSintacticos)
+                {
+                    dgvListaErrores.Rows.Add(err.Codigo,err.Descripcion,err.Linea);
+                }
+                MessageBox.Show("La tarea concluyo con errores","Importante",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+            finally {
+
                 string derivaciones = "";
-                foreach (var ent in miAnalizador.DerivacionesEntradas) {
+                foreach (var ent in miAnalizador.DerivacionesEntradas)
+                {
                     derivaciones += "------------------Entrada----------------------\n";
                     derivaciones += $"{ent.Entrada}\n";
                     derivaciones += "----------------Derivaciones-------------------\n";
@@ -154,13 +186,14 @@ namespace Compilador.Sintactico
                 }
                 rtxtDerivaciones.Text = derivaciones;
 
-                tpErrores.Text = $"Lista de errores";
-                rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
-
-            } catch(Exception ex) {
-
-                MessageBox.Show(ex.Message);
-            }           
+            }
         }
+
+        private void volverALexicoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Lexico.Analizador().Show(); 
+            this.Hide();
+        }
+
     }
 }

@@ -17,7 +17,7 @@ namespace Compilador.Lexico
             }
             else
             {
-                return this.Codigo.Equals(e.Codigo) && this.Columna.Equals(e.Columna) && this.Linea.Equals(e.Linea);
+                return this.Codigo.Equals(e.Codigo) && this.Linea.Equals(e.Linea);
             }
 
         }
