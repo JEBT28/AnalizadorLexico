@@ -23,7 +23,7 @@ namespace Compilador.Sintactico
         private void Sintactico_Load(object sender, EventArgs e)
         {
             string rutaBase = Directory.GetCurrentDirectory().Replace("bin\\Debug", "");
-            System.IO.StreamReader sr = new System.IO.StreamReader($"{rutaBase}ArchivosTemporales\\Tokens.txt");
+            StreamReader sr = new StreamReader($"{rutaBase}ArchivosTemporales\\Tokens.txt");
             rtxtTokens.Text = sr.ReadToEnd();
             sr.Close();
 

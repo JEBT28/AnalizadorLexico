@@ -54,6 +54,7 @@ namespace Compilador.Sintactico
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tabControl1.Controls.Add(this.tpSalida);
             this.tabControl1.Controls.Add(this.tpErrores);
             this.tabControl1.Location = new System.Drawing.Point(30, 493);
@@ -145,6 +146,8 @@ namespace Compilador.Sintactico
             // 
             // rtxtDerivaciones
             // 
+            this.rtxtDerivaciones.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rtxtDerivaciones.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtxtDerivaciones.Font = new System.Drawing.Font("Consolas", 11.25F);
             this.rtxtDerivaciones.Location = new System.Drawing.Point(852, 44);
@@ -160,9 +163,8 @@ namespace Compilador.Sintactico
             // 
             // pnlEditor
             // 
-            this.pnlEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlEditor.BackColor = System.Drawing.Color.White;
             this.pnlEditor.Controls.Add(this.rtxtTokens);
             this.pnlEditor.Controls.Add(this.rtxtNumeracionTokens);
