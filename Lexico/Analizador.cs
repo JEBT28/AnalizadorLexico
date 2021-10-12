@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.IO;
-using System.Linq;
-using Newtonsoft.Json;
 
 namespace Compilador.Lexico
 {
@@ -146,13 +145,13 @@ namespace Compilador.Lexico
         {
             //Declaracion de variables auxiliares 
 
-
             //Reset de la informacion de los controles del form
             dgvListaErrores.Rows.Clear();
             dgvTablaCN.Rows.Clear();
             dgvTablaId.Rows.Clear();
             rtxtTokens.Text = "";
 
+            //Inicializar contadores y variables auxiliares
             int fila = 1;
             int columna = 1;
             int auxColumna = 0;
@@ -327,8 +326,9 @@ namespace Compilador.Lexico
         //Metodo que redirige al analizador sintactico
         private void btnAnalisisSintactico_Click(object sender, EventArgs e)
         {
-            if (erroresEncontrados.Count > 0) {
-                MessageBox.Show("No se puede pasar al analizador sintactico porque contiene errores lexicos.","Atencion",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+            if (erroresEncontrados.Count > 0)
+            {
+                MessageBox.Show("No se puede pasar al analizador sintactico porque contiene errores lexicos.", "Atencion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -389,7 +389,8 @@ namespace Compilador.Lexico
         }
 
         //Metodo que escribe en local los archivos que contienen informacion creada en el analizador lexico
-        private void EscribirArchivosTemporales(string ruta, string contenido) {
+        private void EscribirArchivosTemporales(string ruta, string contenido)
+        {
 
             using (FileStream fileStream = new FileStream(ruta, FileMode.Create, FileAccess.ReadWrite))
             {

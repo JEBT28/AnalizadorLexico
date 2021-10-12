@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Compilador.Sintactico;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Compilador.Sintactico;
-using Compilador.Lexico;
 
 namespace Compilador
 {
@@ -25,7 +24,7 @@ namespace Compilador
 
                     string simbolo = encabezadosColumnas[c];
 
-                    colMatriz.Add(new ColumnaMatriz { NumeroColumna = c - 1, Simbolo = simbolo == "CM" ? "," : simbolo == "CS" ? "'": simbolo == "CD" ? "\"":simbolo });
+                    colMatriz.Add(new ColumnaMatriz { NumeroColumna = c - 1, Simbolo = simbolo == "CM" ? "," : simbolo == "CS" ? "'" : simbolo == "CD" ? "\"" : simbolo });
                 }
                 for (int x = 1; x < filas.Length; x++)
                 {
@@ -67,7 +66,8 @@ namespace Compilador
         }
 
 
-        public List<Gramatica> ObtenerGramaticas() {
+        public List<Gramatica> ObtenerGramaticas()
+        {
             List<Gramatica> gramaticas = new List<Gramatica>();
 
             string[] gramaticasCSV = Properties.Resources.Gramaticas.Split('\n');
@@ -81,12 +81,13 @@ namespace Compilador
                 string expreg = "";
                 for (int i = 1; i < definicion.Length; i++)
                 {
-                    if (!string.IsNullOrEmpty(definicion[i])) {
-                        expreg+= definicion[i]+" ";
+                    if (!string.IsNullOrEmpty(definicion[i]))
+                    {
+                        expreg += definicion[i] + " ";
                     }
                 }
-                                                                  
-                gramaticas.Add(new Gramatica( raiz,new Regex(expreg.Trim())));
+
+                gramaticas.Add(new Gramatica(raiz, new Regex(expreg.Trim())));
             }
 
             return gramaticas;

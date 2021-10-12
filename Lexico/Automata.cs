@@ -10,9 +10,7 @@ namespace Compilador.Lexico
         {
             //Obtencion de la informacion de la base de datos cuando se inicializa en automata
             (MatrizTransiciones, ColumnasMatriz) = new LeerCSV().ObtenerMatriz();
-
             ErroresLenguaje = new LeerCSV().ObtenerErrores();
-
         }
 
         public int EstadoActual { get; set; }
@@ -35,7 +33,6 @@ namespace Compilador.Lexico
             Regex saltoLinea = new Regex(@"[\n]");
 
             EstadoActual = ProximoEstado;
-
 
             int columnaCategoria = ColumnasMatriz.Count - 1;
 
@@ -69,11 +66,15 @@ namespace Compilador.Lexico
 
             if (new Regex(@"[\s]").IsMatch(caracter.ToString()))
             {
-                return ColumnasMatriz.ElementAt(ColumnasMatriz.FindIndex(cm => cm.Simbolo == "FDC")).NumeroColumna;
+                //Buscar el indice de la columna FDC
+                int index = ColumnasMatriz.FindIndex(cm => cm.Simbolo == "FDC");
+
+                return ColumnasMatriz.ElementAt(index).NumeroColumna;
             }
             else
             {
-                return ColumnasMatriz.ElementAt(ColumnasMatriz.FindIndex(cm => cm.Simbolo.Equals(caracter.ToString().Trim()))).NumeroColumna;
+                int index = ColumnasMatriz.FindIndex(cm => cm.Simbolo.Equals(caracter.ToString().Trim()));
+                return ColumnasMatriz.ElementAt(index).NumeroColumna;
             }
         }
 

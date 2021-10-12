@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Compilador.Sintactico
 {
@@ -16,9 +14,7 @@ namespace Compilador.Sintactico
             this.Gramaticas = new LeerCSV().ObtenerGramaticas();
             //Inicializamos la lista donde se almacenaran las entradas derivadas
             this.DerivacionesEntradas = new List<DerivacionEntrada>();
-
             this.ErrorSintacticos = new List<ErrorSintactico>();
-
             //Bloque para imprimir las gramaticas con su pila valida en el debugger
             foreach (var item in Gramaticas)
             {
@@ -27,47 +23,42 @@ namespace Compilador.Sintactico
         }
 
         private int Fila { get; set; }
-        
-
-       
-
         public int CorrespondeciaParentesis { get; set; }
         public int CorrespondeciaLlaves { get; set; }
-        public List<ErrorSintactico> ErrorSintacticos { get; set; } 
-
+        public List<ErrorSintactico> ErrorSintacticos { get; set; }
         public List<Gramatica> Gramaticas { get; set; }
-
-        public List<DerivacionEntrada>  DerivacionesEntradas{ get; set; }
-
+        public List<DerivacionEntrada> DerivacionesEntradas { get; set; }
         public void Recorrido(string[] tokens)
         {
             //Recibimos los tokens de la cadena de entrada
-            
-                Fila = tokens.Length;
-                for (int i = tokens.Length-1; i > -1; i--)
+
+            Fila = tokens.Length;
+            for (int i = tokens.Length - 1; i > -1; i--)
+            {
+                //Recorremos linea por linea los entradas de tokens, descartando las vacias
+                if (!String.IsNullOrWhiteSpace(tokens[i]))
                 {
-                    //Recorremos linea por linea los entradas de tokens, descartando las vacias
-                    if (!String.IsNullOrWhiteSpace(tokens[i]))
-                    {
-                        //Separamos los tokens de la linea en una pila
-                        var entrada = tokens[i].Trim().Split(' ');                      
+                    //Separamos los tokens de la linea en una pila
+                    var entrada = tokens[i].Trim().Split(' ');
 
-                        //Realizamos el recorrido, pasando lo tokens obtenidos
-                        RecorrerEntrada(entradaLinea: entrada);
-                        
-                    }
-                    Fila--;
-                }
+                    //Realizamos el recorrido, pasando lo tokens obtenidos
+                    RecorrerEntrada(entradaLinea: entrada);
 
-               //Al finalizar el recorrido de la cadena de entrada verificamos si existe un desbalance
-               //con los parentesis y llaves que no fue detectado 
-                if (CorrespondeciaLlaves != 0) {                   
-                    ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondeciaLlaves < 0 ? "{" : "}"), Linea = Fila });
                 }
-                if (CorrespondeciaParentesis != 0) {
+                Fila--;
+            }
 
-                    ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondeciaParentesis < 0 ? "(" : ")"), Linea = Fila });
-                }
+            //Al finalizar el recorrido de la cadena de entrada verificamos si existe un desbalance
+            //con los parentesis y llaves que no fue detectado 
+            if (CorrespondeciaLlaves != 0)
+            {
+                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondeciaLlaves < 0 ? "{" : "}"), Linea = Fila });
+            }
+            if (CorrespondeciaParentesis != 0)
+            {
+
+                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondeciaParentesis < 0 ? "(" : ")"), Linea = Fila });
+            }
 
             if (ErrorSintacticos.Count > 0)
             {
@@ -78,10 +69,7 @@ namespace Compilador.Sintactico
             {
                 Debug.WriteLine("Aceptada");
             }
-             
-           
         }
-
         public void RecorrerEntrada(string[] entradaLinea)
         {
             //Inicializamos una lista para trabajar con la pila de entrada
@@ -98,7 +86,6 @@ namespace Compilador.Sintactico
 
             do
             {
-
                 Debug.WriteLine("Antes Despl: " + String.Join(" ", PilaEntrada));
                 // Desplazamiento
 
@@ -133,7 +120,7 @@ namespace Compilador.Sintactico
                     entrada.Derivaciones.Add(String.Join(" ", Pila.Reverse<string>()));
 
                     //Reducimos y recibimos el resultado de la derivacion
-                    var resultado = Reduccion(Pila.ToArray());
+                    var resultado = Derivacion(Pila.ToArray());
 
 
                     //Si el resultado es nulo o espacio en blanco continuamos
@@ -142,16 +129,16 @@ namespace Compilador.Sintactico
                         //Si tenemos un resultado limpiamos la pila y dejamos solo el resultado
                         Pila.Clear();
                         Pila.Add(resultado);
-                    }                    
+                    }
                     else
                     {
                         //Si resultado es nulo y la Pila de entrada ya no tiene tokens disparamos un error 
                         //para avisar que no puede seguir reduciendo para esta pila
                         if (PilaEntrada.Count == 0)
                         {
-                            if (CorrespondeciaParentesis != 0 )
+                            if (CorrespondeciaParentesis != 0)
                             {
-                                ErrorSintacticos.Add(new ErrorSintactico {Codigo="ERROR09", Descripcion = "Se esperaba un " + (CorrespondeciaParentesis < 0 ? "(" : ")"), Linea = Fila });
+                                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondeciaParentesis < 0 ? "(" : ")"), Linea = Fila });
                                 if (CorrespondeciaParentesis < 0)
                                     CorrespondeciaParentesis++;
                                 else
@@ -161,7 +148,7 @@ namespace Compilador.Sintactico
                             }
                             else
                             {
-                                ErrorSintacticos.Add(new ErrorSintactico { Codigo="ERROR06",Descripcion = "Se esperaba otra terminacion para la instruccion. ", Linea = Fila });
+                                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR06", Descripcion = "Se esperaba otra terminacion para la instruccion. ", Linea = Fila });
                                 Pila.Clear();
                                 Pila.Add("ERROR");
                             }
@@ -173,31 +160,30 @@ namespace Compilador.Sintactico
                 // Reversa                
                 PilaEntrada.AddRange(Pila.Reverse<String>());
 
-            } while (Pila.First() != "S" && Pila.First()!="ERROR");//Si la Pila de analisis ya nos devolvio una aceptacion para la entrada salimos
+            } while (Pila.First() != "S" && Pila.First() != "ERROR");//Si la Pila de analisis ya nos devolvio una aceptacion para la entrada salimos
             //Agregamos la aceptacion a la lista de derivaciones para esta entrada
             entrada.Derivaciones.Add(Pila.First());
             //Agregamos la entrada derivada a la lista de entradas derivadas
             DerivacionesEntradas.Add(entrada);
         }
 
-        private string Reduccion(string[] Pila) {
-            
+        private string Derivacion(string[] Pila)
+        {
             //Pasamos la pila a una cadena que pueda ser comparada vs un patron
-            var auxPila = String.Join(" ",Pila.Reverse<string>()).Trim();
+            var auxPila = String.Join(" ", Pila.Reverse<string>()).Trim();
 
-            Debug.Write(auxPila+"->");
+            Debug.Write(auxPila + "->");
 
             //Buscamos que exista una gramatica que pueda reducir la pila de entrada
-            bool gramaticaValida =  Gramaticas.Contains(new Gramatica(auxPila,new Regex(""))) ;        
+            bool gramaticaValida = Gramaticas.Contains(new Gramatica(auxPila, new Regex("")));
 
-            
             if (gramaticaValida)
             {
                 //Si la gramatica es valida la recuperamos
                 var gramatica = Gramaticas.ElementAt(Gramaticas.IndexOf(new Gramatica(auxPila, new Regex(""))));
                 //Hacemos la reduccion    
                 string pilaResultante = gramatica.PilaValida.Replace(auxPila, gramatica.Raiz);
-                
+
                 Debug.WriteLine(pilaResultante);
                 //Retornamos la pila resultante
                 return pilaResultante;
@@ -206,7 +192,7 @@ namespace Compilador.Sintactico
             {
                 //Si no existe gramatica valida se retorna nada para que siga recorriendo la pila
                 return "";
-            }            
+            }
         }
     }
 

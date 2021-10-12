@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Compilador.Sintactico
 {
     public partial class Sintactico : Form
     {
-       
         AnalizadorBottomUp miAnalizador;
         public Sintactico()
         {
             InitializeComponent();
-        }       
+        }
 
         private void Sintactico_Load(object sender, EventArgs e)
         {
@@ -125,7 +118,7 @@ namespace Compilador.Sintactico
             rtxtNumeracionTokens.DeselectAll();
         }
 
-#endregion
+        #endregion
 
         private void cargarArchivoDeTokensToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -137,7 +130,7 @@ namespace Compilador.Sintactico
                 System.IO.StreamReader sr = new System.IO.StreamReader(ofdTokens.FileName);
                 rtxtTokens.Text = sr.ReadToEnd();
                 sr.Close();
-              
+
             }
             AddLineNumbers(rtxtTokens, rtxtNumeracionTokens);
         }
@@ -151,15 +144,11 @@ namespace Compilador.Sintactico
 
             try
             {
-
-
                 miAnalizador.Recorrido(tokensEntrada);
 
-              
                 tpErrores.Text = $"Lista de errores";
                 dgvListaErrores.Rows.Clear();
                 rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
-
             }
             catch (Exception ex)
             {
@@ -168,11 +157,12 @@ namespace Compilador.Sintactico
                 dgvListaErrores.Rows.Clear();
                 foreach (var err in miAnalizador.ErrorSintacticos)
                 {
-                    dgvListaErrores.Rows.Add(err.Codigo,err.Descripcion,err.Linea);
+                    dgvListaErrores.Rows.Add(err.Codigo, err.Descripcion, err.Linea);
                 }
-                MessageBox.Show("La tarea concluyo con errores","Importante",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("La tarea concluyo con errores", "Importante", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            finally {
+            finally
+            {
 
                 string derivaciones = "";
                 foreach (var ent in miAnalizador.DerivacionesEntradas)
@@ -191,7 +181,7 @@ namespace Compilador.Sintactico
         }
 
         private void volverALexicoToolStripMenuItem_Click(object sender, EventArgs e)
-        {            
+        {
             this.Hide();
             this.Dispose();
         }
