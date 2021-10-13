@@ -176,7 +176,6 @@ namespace Compilador.Sintactico
                     }
                 }
                 rtxtDerivaciones.Text = derivaciones;
-
             }
         }
 

@@ -31,44 +31,69 @@ namespace Compilador.Sintactico
         public void Recorrido(string[] tokens)
         {
             //Recibimos los tokens de la cadena de entrada
+            List<string> pilaRaices = new List<string>();
+            DerivacionesEntradas = new List<DerivacionEntrada>();
 
             Fila = tokens.Length;
             for (int i = tokens.Length - 1; i > -1; i--)
-            {
-                //Recorremos linea por linea los entradas de tokens, descartando las vacias
-                if (!String.IsNullOrWhiteSpace(tokens[i]))
+            {               
+
+                if (!String.IsNullOrWhiteSpace(tokens[i]) )
                 {
-                    //Separamos los tokens de la linea en una pila
-                    var entrada = tokens[i].Trim().Split(' ');
+                    if (tokens[i].Trim().Contains(' '))
+                    {
+                        //Realizamos el recorrido, pasando lo tokens obtenidos
+                        string resultado =  DerivarEntrada(entradaLinea: tokens[i]);
 
-                    //Realizamos el recorrido, pasando lo tokens obtenidos
-                    RecorrerEntrada(entradaLinea: entrada);
+                        if (resultado.Equals("ERROR"))
+                        {
+                            ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR06", Descripcion = "Se esperaba otra terminacion para la instruccion. ", Linea = Fila });
+                        }
 
+                        pilaRaices.Add(resultado);
+                    }
+                    else
+                    {
+
+                        DerivacionesEntradas.Add(new DerivacionEntrada(tokens[i]) { Derivaciones = new List<string>() { tokens[i] } });
+                        pilaRaices.Add(tokens[i]);
+                    }
                 }
+               
                 Fila--;
+            }
+
+            pilaRaices.Reverse();
+            string res = DerivarEntrada(String.Join("", pilaRaices));
+            if (res.Trim() == "S")
+            {
+                Debug.WriteLine("Aceptada");
+            }
+            else
+            {
+                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR10", Descripcion = "No se pudo derivar la pila de raices", Linea = 0 });
+                throw new Exception();
+
             }
 
             //Al finalizar el recorrido de la cadena de entrada verificamos si existe un desbalance
             //con los parentesis y llaves que no fue detectado 
             if (CorrespondeciaLlaves != 0)
             {
-                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondeciaLlaves < 0 ? "{" : "}"), Linea = Fila });
+                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondeciaLlaves < 0 ? "{" : "}"), Linea = tokens.Length });
             }
             if (CorrespondeciaParentesis != 0)
             {
 
                 ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondeciaParentesis < 0 ? "(" : ")"), Linea = Fila });
-            }
+            }           
 
             if (ErrorSintacticos.Count > 0)
             {
                 Debug.WriteLine("Rechazada");
                 throw new Exception();
             }
-            else
-            {
-                Debug.WriteLine("Aceptada");
-            }
+            
         }
         public void RecorrerEntrada(string[] entradaLinea)
         {
@@ -110,7 +135,7 @@ namespace Compilador.Sintactico
                         case "CAES15": CorrespondeciaLlaves--; break;
                         default: break;
                     }
-
+                    
                     //Agregamos el token a la pila de analisis
                     Pila.Add(token);
 
@@ -165,7 +190,106 @@ namespace Compilador.Sintactico
             entrada.Derivaciones.Add(Pila.First());
             //Agregamos la entrada derivada a la lista de entradas derivadas
             DerivacionesEntradas.Add(entrada);
+
         }
+
+        public string DerivarEntrada(string entradaLinea)
+        {
+
+            entradaLinea = new Regex("ID[0-9]{2}").Replace(entradaLinea, "ID");
+            entradaLinea = new Regex("CNE[0-9]{2}").Replace(entradaLinea, "CNE");
+            entradaLinea = new Regex("CNR[0-9]{2}").Replace(entradaLinea, "CNR");
+
+            string entradaDerivada = entradaLinea;
+            while (Regex.Matches( entradaDerivada,"  ").Count!=0)
+            {
+                entradaDerivada = entradaDerivada.Replace("  "," ");
+            }
+
+            CorrespondeciaParentesis += Regex.Matches(entradaLinea,"CAES02").Count;
+            CorrespondeciaParentesis -= Regex.Matches(entradaLinea, "CAES13").Count;
+
+            Debug.WriteLine("CorresponednciaParentesis: "+CorrespondeciaParentesis);
+            if (CorrespondeciaParentesis != 0)
+            {
+                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondeciaParentesis < 0 ? "(" : ")"), Linea = Fila });
+                CorrespondeciaParentesis = 0;
+                DerivacionesEntradas.Add(new DerivacionEntrada(entradaLinea) { Derivaciones = new List<string>() { "ERROR" } });
+                return "ERROR"; 
+            }
+
+            CorrespondeciaLlaves += new Regex("CAES14").Matches(entradaLinea).Count;
+            CorrespondeciaLlaves -= new Regex("CAES15").Matches(entradaLinea).Count;
+            Debug.WriteLine("CorresponednciaLlaves: " + CorrespondeciaParentesis);
+            if (CorrespondeciaLlaves != 0)
+            {
+                ErrorSintacticos.Add(new ErrorSintactico { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondeciaLlaves < 0 ? "{" : "}"), Linea = 0 });
+                CorrespondeciaLlaves = 0;
+                DerivacionesEntradas.Add(new DerivacionEntrada(entradaLinea) { Derivaciones = new List<string>() { "ERROR" } });
+                return "ERROR";
+            }          
+            DerivacionEntrada entrada = new DerivacionEntrada(entradaLinea);
+            var pilaAD = "";
+
+            bool control = true;
+            while ( control )
+            {
+
+                if (pilaAD.Equals(entradaDerivada) && !entradaDerivada.Trim().Equals("SENTENCIA"))
+                {
+                    Debug.WriteLine("Pila antes ERROR: " + entradaDerivada);
+                    entradaDerivada = "ERROR";
+                    entrada.Derivaciones.Add(entradaDerivada);
+                }
+
+                pilaAD = entradaDerivada;
+                if (!entradaDerivada.Equals("ERROR"))
+                {
+                    for (int i = Gramaticas.Count - 1; i > -1; i--)
+                    {
+                        var g = Gramaticas[i];
+
+                        string pilaResultante = "";
+                        while (g.PilaValida.IsMatch(entradaDerivada))
+                        {
+                            pilaResultante = g.PilaValida.Replace(entradaDerivada, g.Raiz);
+                            if (!entradaDerivada.Equals(pilaResultante))
+                            {
+                                Debug.WriteLine("Pila antes reduccion: " + entradaDerivada);
+                                Debug.WriteLine("Pila reducida: " + pilaResultante);
+                                entrada.Derivaciones.Add(pilaResultante);
+                                entradaDerivada = pilaResultante;
+                            }
+                        }
+                        
+                    }
+                }
+
+                if (entradaDerivada.Trim().Equals("SENTENCIA"))
+                {
+                    control = false;
+                }
+                else if (entradaDerivada.Equals("ERROR"))
+                {
+                    control = false;
+                }
+                else if (!entradaDerivada.Trim().Contains(' '))
+                {
+                    control = false;
+                }
+                else
+                {
+                    control = true;
+                }
+               
+               
+            }
+
+            DerivacionesEntradas.Add(entrada);
+            return entradaDerivada;
+        }
+
+        
 
         private string Derivacion(string[] Pila)
         {
