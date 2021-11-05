@@ -30,11 +30,6 @@ namespace Compilador.Sintactico
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Sintactico));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tpSalida = new System.Windows.Forms.TabPage();
-            this.rtxtSalida = new System.Windows.Forms.RichTextBox();
-            this.tpErrores = new System.Windows.Forms.TabPage();
-            this.dgvListaErrores = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.volverALexicoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cargarArchivoDeTokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,70 +39,18 @@ namespace Compilador.Sintactico
             this.pnlEditor = new System.Windows.Forms.Panel();
             this.rtxtTokens = new System.Windows.Forms.RichTextBox();
             this.rtxtNumeracionTokens = new System.Windows.Forms.RichTextBox();
-            this.tabControl1.SuspendLayout();
-            this.tpSalida.SuspendLayout();
-            this.tpErrores.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvListaErrores)).BeginInit();
+            this.tpErrores = new System.Windows.Forms.TabPage();
+            this.dgvListaErrores = new System.Windows.Forms.DataGridView();
+            this.tpSalida = new System.Windows.Forms.TabPage();
+            this.rtxtSalida = new System.Windows.Forms.RichTextBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
             this.menuStrip1.SuspendLayout();
             this.pnlEditor.SuspendLayout();
+            this.tpErrores.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvListaErrores)).BeginInit();
+            this.tpSalida.SuspendLayout();
+            this.tabControl1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.tabControl1.Controls.Add(this.tpSalida);
-            this.tabControl1.Controls.Add(this.tpErrores);
-            this.tabControl1.Location = new System.Drawing.Point(30, 493);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(840, 122);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // tpSalida
-            // 
-            this.tpSalida.Controls.Add(this.rtxtSalida);
-            this.tpSalida.Location = new System.Drawing.Point(4, 22);
-            this.tpSalida.Name = "tpSalida";
-            this.tpSalida.Padding = new System.Windows.Forms.Padding(3);
-            this.tpSalida.Size = new System.Drawing.Size(832, 96);
-            this.tpSalida.TabIndex = 0;
-            this.tpSalida.Text = "Salida";
-            this.tpSalida.UseVisualStyleBackColor = true;
-            // 
-            // rtxtSalida
-            // 
-            this.rtxtSalida.BackColor = System.Drawing.Color.White;
-            this.rtxtSalida.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtxtSalida.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtxtSalida.Location = new System.Drawing.Point(3, 3);
-            this.rtxtSalida.Name = "rtxtSalida";
-            this.rtxtSalida.ReadOnly = true;
-            this.rtxtSalida.Size = new System.Drawing.Size(826, 90);
-            this.rtxtSalida.TabIndex = 1;
-            this.rtxtSalida.Text = "";
-            // 
-            // tpErrores
-            // 
-            this.tpErrores.Controls.Add(this.dgvListaErrores);
-            this.tpErrores.Location = new System.Drawing.Point(4, 22);
-            this.tpErrores.Name = "tpErrores";
-            this.tpErrores.Padding = new System.Windows.Forms.Padding(3);
-            this.tpErrores.Size = new System.Drawing.Size(832, 96);
-            this.tpErrores.TabIndex = 1;
-            this.tpErrores.Text = "Lista de errores";
-            this.tpErrores.UseVisualStyleBackColor = true;
-            // 
-            // dgvListaErrores
-            // 
-            this.dgvListaErrores.BackgroundColor = System.Drawing.Color.White;
-            this.dgvListaErrores.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvListaErrores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvListaErrores.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvListaErrores.Location = new System.Drawing.Point(3, 3);
-            this.dgvListaErrores.Name = "dgvListaErrores";
-            this.dgvListaErrores.RowHeadersVisible = false;
-            this.dgvListaErrores.Size = new System.Drawing.Size(826, 90);
-            this.dgvListaErrores.TabIndex = 1;
             // 
             // menuStrip1
             // 
@@ -130,17 +73,15 @@ namespace Compilador.Sintactico
             // 
             // cargarArchivoDeTokensToolStripMenuItem
             // 
-            this.cargarArchivoDeTokensToolStripMenuItem.Image = global::Compilador.Properties.Resources._090_upload;
             this.cargarArchivoDeTokensToolStripMenuItem.Name = "cargarArchivoDeTokensToolStripMenuItem";
-            this.cargarArchivoDeTokensToolStripMenuItem.Size = new System.Drawing.Size(166, 20);
+            this.cargarArchivoDeTokensToolStripMenuItem.Size = new System.Drawing.Size(150, 20);
             this.cargarArchivoDeTokensToolStripMenuItem.Text = "Cargar archivo de tokens";
             this.cargarArchivoDeTokensToolStripMenuItem.Click += new System.EventHandler(this.cargarArchivoDeTokensToolStripMenuItem_Click);
             // 
             // iniciarAnalisisToolStripMenuItem
             // 
-            this.iniciarAnalisisToolStripMenuItem.Image = global::Compilador.Properties.Resources.start;
             this.iniciarAnalisisToolStripMenuItem.Name = "iniciarAnalisisToolStripMenuItem";
-            this.iniciarAnalisisToolStripMenuItem.Size = new System.Drawing.Size(108, 20);
+            this.iniciarAnalisisToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
             this.iniciarAnalisisToolStripMenuItem.Text = "Iniciar analisis";
             this.iniciarAnalisisToolStripMenuItem.Click += new System.EventHandler(this.iniciarAnalisisToolStripMenuItem_Click);
             // 
@@ -207,6 +148,64 @@ namespace Compilador.Sintactico
             this.rtxtNumeracionTokens.Text = "";
             this.rtxtNumeracionTokens.MouseDown += new System.Windows.Forms.MouseEventHandler(this.rtxtLineNumber_MouseDown);
             // 
+            // tpErrores
+            // 
+            this.tpErrores.Controls.Add(this.dgvListaErrores);
+            this.tpErrores.Location = new System.Drawing.Point(4, 22);
+            this.tpErrores.Name = "tpErrores";
+            this.tpErrores.Padding = new System.Windows.Forms.Padding(3);
+            this.tpErrores.Size = new System.Drawing.Size(832, 96);
+            this.tpErrores.TabIndex = 1;
+            this.tpErrores.Text = "Lista de errores";
+            this.tpErrores.UseVisualStyleBackColor = true;
+            // 
+            // dgvListaErrores
+            // 
+            this.dgvListaErrores.BackgroundColor = System.Drawing.Color.White;
+            this.dgvListaErrores.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvListaErrores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvListaErrores.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvListaErrores.Location = new System.Drawing.Point(3, 3);
+            this.dgvListaErrores.Name = "dgvListaErrores";
+            this.dgvListaErrores.RowHeadersVisible = false;
+            this.dgvListaErrores.Size = new System.Drawing.Size(826, 90);
+            this.dgvListaErrores.TabIndex = 1;
+            this.dgvListaErrores.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvListaErrores_CellContentClick);
+            // 
+            // tpSalida
+            // 
+            this.tpSalida.Controls.Add(this.rtxtSalida);
+            this.tpSalida.Location = new System.Drawing.Point(4, 22);
+            this.tpSalida.Name = "tpSalida";
+            this.tpSalida.Padding = new System.Windows.Forms.Padding(3);
+            this.tpSalida.Size = new System.Drawing.Size(832, 96);
+            this.tpSalida.TabIndex = 0;
+            this.tpSalida.Text = "Salida";
+            this.tpSalida.UseVisualStyleBackColor = true;
+            // 
+            // rtxtSalida
+            // 
+            this.rtxtSalida.BackColor = System.Drawing.Color.White;
+            this.rtxtSalida.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtxtSalida.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtxtSalida.Location = new System.Drawing.Point(3, 3);
+            this.rtxtSalida.Name = "rtxtSalida";
+            this.rtxtSalida.ReadOnly = true;
+            this.rtxtSalida.Size = new System.Drawing.Size(826, 90);
+            this.rtxtSalida.TabIndex = 1;
+            this.rtxtSalida.Text = "";
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.tabControl1.Controls.Add(this.tpSalida);
+            this.tabControl1.Controls.Add(this.tpErrores);
+            this.tabControl1.Location = new System.Drawing.Point(30, 493);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(840, 122);
+            this.tabControl1.TabIndex = 0;
+            // 
             // Sintactico
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -222,23 +221,19 @@ namespace Compilador.Sintactico
             this.Name = "Sintactico";
             this.Text = "Sintactico";
             this.Load += new System.EventHandler(this.Sintactico_Load);
-            this.tabControl1.ResumeLayout(false);
-            this.tpSalida.ResumeLayout(false);
-            this.tpErrores.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvListaErrores)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlEditor.ResumeLayout(false);
+            this.tpErrores.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvListaErrores)).EndInit();
+            this.tpSalida.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tpSalida;
-        private System.Windows.Forms.TabPage tpErrores;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem cargarArchivoDeTokensToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iniciarAnalisisToolStripMenuItem;
@@ -247,8 +242,11 @@ namespace Compilador.Sintactico
         private System.Windows.Forms.Panel pnlEditor;
         private System.Windows.Forms.RichTextBox rtxtTokens;
         private System.Windows.Forms.RichTextBox rtxtNumeracionTokens;
-        private System.Windows.Forms.RichTextBox rtxtSalida;
         private System.Windows.Forms.ToolStripMenuItem volverALexicoToolStripMenuItem;
+        private System.Windows.Forms.TabPage tpErrores;
         private System.Windows.Forms.DataGridView dgvListaErrores;
+        private System.Windows.Forms.TabPage tpSalida;
+        private System.Windows.Forms.RichTextBox rtxtSalida;
+        private System.Windows.Forms.TabControl tabControl1;
     }
 }

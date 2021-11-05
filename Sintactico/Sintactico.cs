@@ -7,7 +7,7 @@ namespace Compilador.Sintactico
 {
     public partial class Sintactico : Form
     {
-        AnalizadorBottomUp miAnalizador;
+        AnalizadorBottomUp miAnalizadorBUP;
         public Sintactico()
         {
             InitializeComponent();
@@ -140,11 +140,11 @@ namespace Compilador.Sintactico
 
             string[] tokensEntrada = rtxtTokens.Text.Split('\n');
 
-            miAnalizador = new AnalizadorBottomUp();
+            miAnalizadorBUP = new AnalizadorBottomUp();
 
             try
             {
-                miAnalizador.Recorrido(tokensEntrada);
+                miAnalizadorBUP.Recorrido(tokensEntrada);
 
                 tpErrores.Text = $"Lista de errores";
                 dgvListaErrores.Rows.Clear();
@@ -152,10 +152,10 @@ namespace Compilador.Sintactico
             }
             catch (Exception ex)
             {
-                tpErrores.Text = $"Lista de errores: {miAnalizador.ErrorSintacticos.Count}.";
+                tpErrores.Text = $"Lista de errores: {miAnalizadorBUP.ErroresSintacticos.Count}.";
                 rtxtSalida.Text = "El analizador termino la tarea con errores.\nRevisar la pestaña de errores.";
                 dgvListaErrores.Rows.Clear();
-                foreach (var err in miAnalizador.ErrorSintacticos)
+                foreach (var err in miAnalizadorBUP.ErroresSintacticos)
                 {
                     dgvListaErrores.Rows.Add(err.Codigo, err.Descripcion, err.Linea);
                 }
@@ -165,7 +165,7 @@ namespace Compilador.Sintactico
             {
 
                 string derivaciones = "";
-                foreach (var ent in miAnalizador.DerivacionesEntradas)
+                foreach (var ent in miAnalizadorBUP.DerivacionesEntradas)
                 {
                     derivaciones += "------------------Entrada----------------------\n";
                     derivaciones += $"{ent.Entrada}\n";
@@ -185,5 +185,9 @@ namespace Compilador.Sintactico
             this.Dispose();
         }
 
+        private void dgvListaErrores_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

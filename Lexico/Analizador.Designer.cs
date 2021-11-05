@@ -42,6 +42,8 @@ namespace Compilador.Lexico
             this.dgvTablaId = new System.Windows.Forms.DataGridView();
             this.tpgCN = new System.Windows.Forms.TabPage();
             this.dgvTablaCN = new System.Windows.Forms.DataGridView();
+            this.tpgErroresSintacticos = new System.Windows.Forms.TabPage();
+            this.dgvErroresSintacticos = new System.Windows.Forms.DataGridView();
             this.rtxtTokens = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.NuevoProgramatoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,11 +55,14 @@ namespace Compilador.Lexico
             this.rtxtNumeracionTokens = new System.Windows.Forms.RichTextBox();
             this.sfdCodigo = new System.Windows.Forms.SaveFileDialog();
             this.ofdCodigo = new System.Windows.Forms.OpenFileDialog();
-            this.btnAnalisisSintactico = new System.Windows.Forms.Button();
             this.sfdTokens = new System.Windows.Forms.SaveFileDialog();
             this.btnGuardarArchivoTokens = new System.Windows.Forms.Button();
             this.btnAnalisisStx = new System.Windows.Forms.Button();
             this.bToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtxtDerivaciones = new System.Windows.Forms.RichTextBox();
+            this.pnlBase = new System.Windows.Forms.TableLayoutPanel();
+            this.tpgErroresSemanticos = new System.Windows.Forms.TabPage();
+            this.dgvErroresSemanticos = new System.Windows.Forms.DataGridView();
             this.pnlEditor.SuspendLayout();
             this.tabSalidas.SuspendLayout();
             this.tpgSalida.SuspendLayout();
@@ -67,8 +72,13 @@ namespace Compilador.Lexico
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaId)).BeginInit();
             this.tpgCN.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaCN)).BeginInit();
+            this.tpgErroresSintacticos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvErroresSintacticos)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.pnlTokens.SuspendLayout();
+            this.pnlBase.SuspendLayout();
+            this.tpgErroresSemanticos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvErroresSemanticos)).BeginInit();
             this.SuspendLayout();
             // 
             // rtxtNumeracionCodigo
@@ -83,23 +93,21 @@ namespace Compilador.Lexico
             this.rtxtNumeracionCodigo.Name = "rtxtNumeracionCodigo";
             this.rtxtNumeracionCodigo.ReadOnly = true;
             this.rtxtNumeracionCodigo.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.rtxtNumeracionCodigo.Size = new System.Drawing.Size(40, 431);
+            this.rtxtNumeracionCodigo.Size = new System.Drawing.Size(40, 410);
             this.rtxtNumeracionCodigo.TabIndex = 0;
             this.rtxtNumeracionCodigo.Text = "";
             this.rtxtNumeracionCodigo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.rtxtLineNumber_MouseDown);
             // 
             // pnlEditor
             // 
-            this.pnlEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlEditor.BackColor = System.Drawing.Color.White;
             this.pnlEditor.Controls.Add(this.rtxtCodigo);
             this.pnlEditor.Controls.Add(this.rtxtNumeracionCodigo);
-            this.pnlEditor.Location = new System.Drawing.Point(12, 35);
+            this.pnlEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlEditor.Location = new System.Drawing.Point(3, 3);
             this.pnlEditor.Name = "pnlEditor";
             this.pnlEditor.Padding = new System.Windows.Forms.Padding(6);
-            this.pnlEditor.Size = new System.Drawing.Size(816, 443);
+            this.pnlEditor.Size = new System.Drawing.Size(420, 422);
             this.pnlEditor.TabIndex = 1;
             // 
             // rtxtCodigo
@@ -110,7 +118,7 @@ namespace Compilador.Lexico
             this.rtxtCodigo.Location = new System.Drawing.Point(46, 6);
             this.rtxtCodigo.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.rtxtCodigo.Name = "rtxtCodigo";
-            this.rtxtCodigo.Size = new System.Drawing.Size(764, 431);
+            this.rtxtCodigo.Size = new System.Drawing.Size(368, 410);
             this.rtxtCodigo.TabIndex = 1;
             this.rtxtCodigo.Text = "";
             this.rtxtCodigo.SelectionChanged += new System.EventHandler(this.rtxtCodigo_SelectionChanged);
@@ -127,6 +135,8 @@ namespace Compilador.Lexico
             this.tabSalidas.Controls.Add(this.tpgErrores);
             this.tabSalidas.Controls.Add(this.tpgId);
             this.tabSalidas.Controls.Add(this.tpgCN);
+            this.tabSalidas.Controls.Add(this.tpgErroresSintacticos);
+            this.tabSalidas.Controls.Add(this.tpgErroresSemanticos);
             this.tabSalidas.Location = new System.Drawing.Point(12, 484);
             this.tabSalidas.Name = "tabSalidas";
             this.tabSalidas.SelectedIndex = 0;
@@ -223,24 +233,53 @@ namespace Compilador.Lexico
             this.dgvTablaCN.Size = new System.Drawing.Size(808, 105);
             this.dgvTablaCN.TabIndex = 1;
             // 
+            // tpgErroresSintacticos
+            // 
+            this.tpgErroresSintacticos.Controls.Add(this.dgvErroresSintacticos);
+            this.tpgErroresSintacticos.Location = new System.Drawing.Point(4, 22);
+            this.tpgErroresSintacticos.Name = "tpgErroresSintacticos";
+            this.tpgErroresSintacticos.Size = new System.Drawing.Size(808, 105);
+            this.tpgErroresSintacticos.TabIndex = 4;
+            this.tpgErroresSintacticos.Text = "Lista Errores Sintacticos";
+            this.tpgErroresSintacticos.UseVisualStyleBackColor = true;
+            // 
+            // dgvErroresSintacticos
+            // 
+            this.dgvErroresSintacticos.BackgroundColor = System.Drawing.Color.White;
+            this.dgvErroresSintacticos.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvErroresSintacticos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvErroresSintacticos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvErroresSintacticos.Location = new System.Drawing.Point(0, 0);
+            this.dgvErroresSintacticos.Name = "dgvErroresSintacticos";
+            this.dgvErroresSintacticos.RowHeadersVisible = false;
+            this.dgvErroresSintacticos.Size = new System.Drawing.Size(808, 105);
+            this.dgvErroresSintacticos.TabIndex = 2;
+            // 
             // rtxtTokens
             // 
+            this.rtxtTokens.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rtxtTokens.BackColor = System.Drawing.Color.White;
             this.rtxtTokens.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtxtTokens.Dock = System.Windows.Forms.DockStyle.Right;
             this.rtxtTokens.Font = new System.Drawing.Font("Consolas", 11.25F);
-            this.rtxtTokens.Location = new System.Drawing.Point(52, 6);
+            this.rtxtTokens.Location = new System.Drawing.Point(38, 6);
             this.rtxtTokens.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.rtxtTokens.Name = "rtxtTokens";
             this.rtxtTokens.ReadOnly = true;
-            this.rtxtTokens.Size = new System.Drawing.Size(400, 431);
+            this.rtxtTokens.Size = new System.Drawing.Size(389, 410);
             this.rtxtTokens.TabIndex = 3;
             this.rtxtTokens.Text = "";
             // 
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.NuevoProgramatoolStripMenuItem, this.cargarProgramaToolStripMenuItem, this.guardarProgramaToolStripMenuItem, this.guardarComoToolStripMenuItem, this.iniciarAnalisisToolStripMenuItem });
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.NuevoProgramatoolStripMenuItem,
+            this.cargarProgramaToolStripMenuItem,
+            this.guardarProgramaToolStripMenuItem,
+            this.guardarComoToolStripMenuItem,
+            this.iniciarAnalisisToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1316, 24);
@@ -249,7 +288,7 @@ namespace Compilador.Lexico
             // 
             // NuevoProgramatoolStripMenuItem
             // 
-            this.NuevoProgramatoolStripMenuItem.Image = global::Compilador.Properties.Resources._066_plus;
+            this.NuevoProgramatoolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("NuevoProgramatoolStripMenuItem.Image")));
             this.NuevoProgramatoolStripMenuItem.Name = "NuevoProgramatoolStripMenuItem";
             this.NuevoProgramatoolStripMenuItem.Size = new System.Drawing.Size(125, 20);
             this.NuevoProgramatoolStripMenuItem.Text = "Nuevo programa";
@@ -280,7 +319,7 @@ namespace Compilador.Lexico
             // 
             // iniciarAnalisisToolStripMenuItem
             // 
-            this.iniciarAnalisisToolStripMenuItem.Image = global::Compilador.Properties.Resources.start;
+            this.iniciarAnalisisToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("iniciarAnalisisToolStripMenuItem.Image")));
             this.iniciarAnalisisToolStripMenuItem.Name = "iniciarAnalisisToolStripMenuItem";
             this.iniciarAnalisisToolStripMenuItem.Size = new System.Drawing.Size(108, 20);
             this.iniciarAnalisisToolStripMenuItem.Text = "Iniciar analisis";
@@ -288,15 +327,14 @@ namespace Compilador.Lexico
             // 
             // pnlTokens
             // 
-            this.pnlTokens.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTokens.BackColor = System.Drawing.Color.White;
             this.pnlTokens.Controls.Add(this.rtxtNumeracionTokens);
             this.pnlTokens.Controls.Add(this.rtxtTokens);
-            this.pnlTokens.Location = new System.Drawing.Point(846, 35);
+            this.pnlTokens.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlTokens.Location = new System.Drawing.Point(429, 3);
             this.pnlTokens.Name = "pnlTokens";
             this.pnlTokens.Padding = new System.Windows.Forms.Padding(6);
-            this.pnlTokens.Size = new System.Drawing.Size(458, 443);
+            this.pnlTokens.Size = new System.Drawing.Size(433, 422);
             this.pnlTokens.TabIndex = 2;
             // 
             // rtxtNumeracionTokens
@@ -311,7 +349,7 @@ namespace Compilador.Lexico
             this.rtxtNumeracionTokens.Name = "rtxtNumeracionTokens";
             this.rtxtNumeracionTokens.ReadOnly = true;
             this.rtxtNumeracionTokens.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.rtxtNumeracionTokens.Size = new System.Drawing.Size(40, 431);
+            this.rtxtNumeracionTokens.Size = new System.Drawing.Size(40, 410);
             this.rtxtNumeracionTokens.TabIndex = 0;
             this.rtxtNumeracionTokens.Text = "";
             // 
@@ -322,21 +360,6 @@ namespace Compilador.Lexico
             // ofdCodigo
             // 
             this.ofdCodigo.FileName = "openFileDialog1";
-            // 
-            // btnAnalisisSintactico
-            // 
-            this.btnAnalisisSintactico.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAnalisisSintactico.BackColor = System.Drawing.Color.RoyalBlue;
-            this.btnAnalisisSintactico.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnAnalisisSintactico.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnAnalisisSintactico.ForeColor = System.Drawing.Color.White;
-            this.btnAnalisisSintactico.Location = new System.Drawing.Point(846, 504);
-            this.btnAnalisisSintactico.Name = "btnAnalisisSintactico";
-            this.btnAnalisisSintactico.Size = new System.Drawing.Size(458, 27);
-            this.btnAnalisisSintactico.TabIndex = 5;
-            this.btnAnalisisSintactico.Text = "Analisis sintactico";
-            this.btnAnalisisSintactico.UseVisualStyleBackColor = false;
-            this.btnAnalisisSintactico.Click += new System.EventHandler(this.btnAnalisisSintactico_Click);
             // 
             // btnGuardarArchivoTokens
             // 
@@ -374,16 +397,66 @@ namespace Compilador.Lexico
             this.bToolStripMenuItem.Size = new System.Drawing.Size(26, 20);
             this.bToolStripMenuItem.Text = "b";
             // 
+            // rtxtDerivaciones
+            // 
+            this.rtxtDerivaciones.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtxtDerivaciones.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtxtDerivaciones.Font = new System.Drawing.Font("Consolas", 11.25F);
+            this.rtxtDerivaciones.Location = new System.Drawing.Point(868, 3);
+            this.rtxtDerivaciones.Name = "rtxtDerivaciones";
+            this.rtxtDerivaciones.Size = new System.Drawing.Size(421, 422);
+            this.rtxtDerivaciones.TabIndex = 6;
+            this.rtxtDerivaciones.Text = "";
+            // 
+            // pnlBase
+            // 
+            this.pnlBase.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlBase.ColumnCount = 3;
+            this.pnlBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.pnlBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34F));
+            this.pnlBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.pnlBase.Controls.Add(this.pnlEditor, 0, 0);
+            this.pnlBase.Controls.Add(this.rtxtDerivaciones, 2, 0);
+            this.pnlBase.Controls.Add(this.pnlTokens, 1, 0);
+            this.pnlBase.Location = new System.Drawing.Point(12, 39);
+            this.pnlBase.Name = "pnlBase";
+            this.pnlBase.RowCount = 1;
+            this.pnlBase.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.pnlBase.Size = new System.Drawing.Size(1292, 428);
+            this.pnlBase.TabIndex = 7;
+            // 
+            // tpgErroresSemanticos
+            // 
+            this.tpgErroresSemanticos.Controls.Add(this.dgvErroresSemanticos);
+            this.tpgErroresSemanticos.Location = new System.Drawing.Point(4, 22);
+            this.tpgErroresSemanticos.Name = "tpgErroresSemanticos";
+            this.tpgErroresSemanticos.Size = new System.Drawing.Size(808, 105);
+            this.tpgErroresSemanticos.TabIndex = 5;
+            this.tpgErroresSemanticos.Text = "Lista Errores Semanticos";
+            this.tpgErroresSemanticos.UseVisualStyleBackColor = true;
+            // 
+            // dgvErroresSemanticos
+            // 
+            this.dgvErroresSemanticos.BackgroundColor = System.Drawing.Color.White;
+            this.dgvErroresSemanticos.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvErroresSemanticos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvErroresSemanticos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvErroresSemanticos.Location = new System.Drawing.Point(0, 0);
+            this.dgvErroresSemanticos.Name = "dgvErroresSemanticos";
+            this.dgvErroresSemanticos.RowHeadersVisible = false;
+            this.dgvErroresSemanticos.Size = new System.Drawing.Size(808, 105);
+            this.dgvErroresSemanticos.TabIndex = 2;
+            // 
             // Analizador
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(1316, 627);
-            this.Controls.Add(this.btnAnalisisSintactico);
-            this.Controls.Add(this.pnlTokens);
+            this.Controls.Add(this.pnlBase);
             this.Controls.Add(this.tabSalidas);
-            this.Controls.Add(this.pnlEditor);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -401,9 +474,14 @@ namespace Compilador.Lexico
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaId)).EndInit();
             this.tpgCN.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTablaCN)).EndInit();
+            this.tpgErroresSintacticos.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvErroresSintacticos)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlTokens.ResumeLayout(false);
+            this.pnlBase.ResumeLayout(false);
+            this.tpgErroresSemanticos.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvErroresSemanticos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -432,12 +510,17 @@ namespace Compilador.Lexico
         private System.Windows.Forms.DataGridView dgvTablaId;
         private System.Windows.Forms.TabPage tpgCN;
         private System.Windows.Forms.DataGridView dgvTablaCN;
-        private System.Windows.Forms.Button btnAnalisisSintactico;
         private System.Windows.Forms.SaveFileDialog sfdTokens;
         private System.Windows.Forms.ToolStripMenuItem NuevoProgramatoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem guardarComoToolStripMenuItem;
         private System.Windows.Forms.Button btnGuardarArchivoTokens;
         private System.Windows.Forms.Button btnAnalisisStx;
         private System.Windows.Forms.ToolStripMenuItem bToolStripMenuItem;
+        private System.Windows.Forms.RichTextBox rtxtDerivaciones;
+        private System.Windows.Forms.TabPage tpgErroresSintacticos;
+        private System.Windows.Forms.DataGridView dgvErroresSintacticos;
+        private System.Windows.Forms.TableLayoutPanel pnlBase;
+        private System.Windows.Forms.TabPage tpgErroresSemanticos;
+        private System.Windows.Forms.DataGridView dgvErroresSemanticos;
     }
 }

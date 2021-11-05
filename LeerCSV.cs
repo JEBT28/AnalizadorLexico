@@ -39,7 +39,7 @@ namespace Compilador
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show(e.Message, "Ocurrio un error");
+                System.Windows.Forms.MessageBox.Show(e.Message, "Ocurrio un error: Matriz");
             }
 
             return (matriz, colMatriz);
@@ -59,7 +59,7 @@ namespace Compilador
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show(e.Message, "Ocurrio un error");
+                System.Windows.Forms.MessageBox.Show(e.Message, "Ocurrio un error: Errores");
             }
 
             return errores;

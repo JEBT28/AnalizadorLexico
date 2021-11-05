@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Compilador.Sintactico;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,6 +13,7 @@ namespace Compilador.Lexico
     {
         string rutaArchivo = @"";
         Automata miAutomata;
+        AnalizadorBottomUp miAnalizadorBUP;
 
         List<Error> erroresEncontrados;
         public Analizador()
@@ -47,6 +49,20 @@ namespace Compilador.Lexico
             dgvTablaCN.Columns.Add("Jerarquia", "Jerarquia");
             dgvTablaCN.ReadOnly = true;
             dgvTablaCN.AllowUserToAddRows = false;
+
+
+            dgvErroresSintacticos.Columns.Add("Codigo", "Codigo");
+            dgvErroresSintacticos.Columns.Add("Descripcion", "Descripción");
+            dgvErroresSintacticos.Columns.Add("Linea", "Linea");
+            dgvErroresSintacticos.ReadOnly = true;
+            dgvErroresSintacticos.AllowUserToAddRows = false;
+
+
+            dgvErroresSemanticos.Columns.Add("Codigo", "Codigo");
+            dgvErroresSemanticos.Columns.Add("Descripcion", "Descripción");
+            dgvErroresSemanticos.Columns.Add("Linea", "Linea");
+            dgvErroresSemanticos.ReadOnly = true;
+            dgvErroresSemanticos.AllowUserToAddRows = false;
 
         }
         #region Funcionalidad de la caja de texto para escribir codigo
@@ -157,6 +173,7 @@ namespace Compilador.Lexico
             int auxColumna = 0;
             string cadena = rtxtCodigo.Text;
             string fragmentoEvaluado = "";
+            string fragmentoAnterior = "";
             erroresEncontrados = new List<Error>();
 
             // inicilaizacion de propiedades del automata
@@ -206,7 +223,7 @@ namespace Compilador.Lexico
                         //El token es un identificador
                         else if (result.Contains("ID"))
                         {
-                            result += miAutomata.ValidarIdentificador(fragmentoEvaluado);
+                            result += miAutomata.ValidarIdentificador(fragmentoEvaluado, fragmentoAnterior);
 
                             AgregarToken(result + " ", Color.Black);
                         }
@@ -226,6 +243,7 @@ namespace Compilador.Lexico
                         AddLineNumbers(rtxtTokens, rtxtNumeracionTokens);
                         columna += auxColumna;
                         auxColumna = 0;
+                        fragmentoAnterior = fragmentoEvaluado;
                         fragmentoEvaluado = "";
                     }
                     //No devolvio un token
@@ -266,6 +284,8 @@ namespace Compilador.Lexico
 
                 EscribirArchivosTemporales($"{rutaBase}ArchivosTemporales\\Identificadores.json", JsonConvert.SerializeObject(miAutomata.TablaIdentificadores));
 
+                AnalisisSintacticoSemantico(rtxtTokens.Text.Split('\n'));
+
             }
 
             //Rutina que muestra la tabla de identificadores
@@ -279,6 +299,70 @@ namespace Compilador.Lexico
             {
                 dgvTablaCN.Rows.Add(cn.Id.ToString("00"), cn.Valor, cn.NumeroOperador, cn.Jerarquia);
             }
+
+
+        }
+
+
+        public void AnalisisSintacticoSemantico(string[] tokensEntrada)
+        {
+
+            miAnalizadorBUP = new AnalizadorBottomUp();
+
+            try
+            {
+                miAnalizadorBUP.Recorrido(tokensEntrada);
+
+                tpgErroresSintacticos.Text = $"Lista de errores";
+                dgvListaErrores.Rows.Clear();
+                rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
+            }
+            catch (Exception ex)
+            {
+                tpgErroresSintacticos.Text = $"Lista de errores sintacticos: {miAnalizadorBUP.ErroresSintacticos.Count}.";
+                rtxtSalida.Text = "El analizador termino la tarea con errores.\nRevisar la pestaña de errores.";
+                dgvErroresSintacticos.Rows.Clear();
+                foreach (var err in miAnalizadorBUP.ErroresSintacticos)
+                {
+                    dgvErroresSintacticos.Rows.Add(err.Codigo, err.Descripcion, err.Linea);
+                }
+                MessageBox.Show("La tarea concluyo con errores", "Importante", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (miAnalizadorBUP.ErroresSemanticos.Count > 0)
+                {
+                    tpgErroresSemanticos.Text = $"Lista de errores semanticos: {miAnalizadorBUP.ErroresSemanticos.Count}.";
+                    rtxtSalida.Text = "El analizador termino la tarea con errores semanticos.\nRevisar la pestaña de errores.";
+                    dgvErroresSemanticos.Rows.Clear();
+
+                    foreach (var err in miAnalizadorBUP.ErroresSemanticos)
+                    {
+                        dgvErroresSemanticos.Rows.Add(err.Codigo, err.Descripcion, err.Linea);
+                    }
+
+                }
+                else
+                {
+                    tpgErroresSemanticos.Text = $"Lista de errores semanticos";
+                    rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
+                }
+            }
+            finally
+            {
+
+                string derivaciones = "";
+                foreach (var ent in miAnalizadorBUP.DerivacionesEntradas)
+                {
+                    derivaciones += "------------------Entrada----------------------\n";
+                    derivaciones += $"{ent.Entrada}\n";
+                    derivaciones += "----------------Derivaciones-------------------\n";
+                    foreach (var der in ent.Derivaciones)
+                    {
+                        derivaciones += $"{der}\n";
+                    }
+                }
+                rtxtDerivaciones.Text = derivaciones;
+            }
+
         }
 
         //Metodo que agrega los tokens al archivo de tokens y define el color del texto segun su tipo
@@ -402,5 +486,7 @@ namespace Compilador.Lexico
 
 
         }
+
+
     }
 }

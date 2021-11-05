@@ -6,3 +6,6 @@ ERROR05,El operador relacional indicado no existe.
 ERROR06,No existe una instrucción con la estructura indicada.
 ERROR07,El identificador no cumple con las reglas definidas.
 ERROR08,Se esperaba otro simbolo o fin para la cadena de texto
+ERROR11,Asignacion de un valor diferente al permitido por el tipo del identificador.
+ERROR12,Operación entre valores no compatibles.
+ERROR13,Declaracion de un identificador no valida.
