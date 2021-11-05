@@ -267,14 +267,14 @@ namespace Compilador.Lexico
                 }
                 dgvListaErrores.AutoResizeColumns();
 
-                tpgErrores.Text = $"Lista de errores ({erroresEncontrados.Count} encontrados)";
+                tpgErrores.Text = $"Lista de errores lexicos ({erroresEncontrados.Count} encontrados)";
                 rtxtSalida.Text = "El analizador termino la tarea y encontro errores, vea la lista de errores para mas información.";
                 dgvListaErrores.AutoResizeColumns();
 
             }
             else
             {
-                tpgErrores.Text = $"Lista de errores";
+                tpgErrores.Text = $"Lista de errores lexicos";
                 rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
 
                 string rutaBase = Directory.GetCurrentDirectory().Replace("bin\\Debug", "");
@@ -313,7 +313,7 @@ namespace Compilador.Lexico
             {
                 miAnalizadorBUP.Recorrido(tokensEntrada);
 
-                tpgErroresSintacticos.Text = $"Lista de errores";
+                tpgErroresSintacticos.Text = $"Lista de errores sintacticos";
                 dgvListaErrores.Rows.Clear();
                 rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
             }
@@ -344,6 +344,7 @@ namespace Compilador.Lexico
                 {
                     tpgErroresSemanticos.Text = $"Lista de errores semanticos";
                     rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
+                    dgvErroresSemanticos.Rows.Clear();
                 }
             }
             finally

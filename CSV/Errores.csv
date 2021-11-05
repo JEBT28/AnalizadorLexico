@@ -9,3 +9,4 @@ ERROR08,Se esperaba otro simbolo o fin para la cadena de texto
 ERROR11,Asignacion de un valor diferente al permitido por el tipo del identificador.
 ERROR12,Operación entre valores no compatibles.
 ERROR13,Declaracion de un identificador no valida.
+ERROR14,La instrucción no cumple con la estructura definida.
