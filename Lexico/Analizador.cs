@@ -299,8 +299,6 @@ namespace Compilador.Lexico
             {
                 dgvTablaCN.Rows.Add(cn.Id.ToString("00"), cn.Valor, cn.NumeroOperador, cn.Jerarquia);
             }
-
-
         }
 
 
