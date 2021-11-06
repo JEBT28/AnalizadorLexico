@@ -34,7 +34,7 @@ bld/
 [Ll]ogs/
 
 # Archivos Temporales del analizador lexico
-ArchivosTemporales/
+ArchivosTemporales/*.json
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

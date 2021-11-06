@@ -314,8 +314,32 @@ namespace Compilador.Lexico
                 miAnalizadorBUP.Recorrido(tokensEntrada);
 
                 tpgErroresSintacticos.Text = $"Lista de errores sintacticos";
+                
+      
+
                 dgvListaErrores.Rows.Clear();
+                dgvErroresSintacticos.Rows.Clear();
+                
                 rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
+
+                if (miAnalizadorBUP.ErroresSemanticos.Count > 0)
+                {
+                    tpgErroresSemanticos.Text = $"Lista de errores semanticos: {miAnalizadorBUP.ErroresSemanticos.Count}.";
+                    rtxtSalida.Text = "El analizador termino la tarea con errores semanticos.\nRevisar la pestaña de errores.";
+                    dgvErroresSemanticos.Rows.Clear();
+
+                    foreach (var err in miAnalizadorBUP.ErroresSemanticos)
+                    {
+                        dgvErroresSemanticos.Rows.Add(err.Codigo, err.Descripcion, err.Linea);
+                    }
+
+                }
+                else
+                {
+                    tpgErroresSemanticos.Text = $"Lista de errores semanticos";
+                    rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
+                    dgvErroresSemanticos.Rows.Clear();
+                }
             }
             catch (Exception ex)
             {
