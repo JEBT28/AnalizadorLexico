@@ -26,18 +26,21 @@ namespace Compilador.Sintactico
 
         private List<Lexico.Error> ListaErrores { get; set; }
         private int Fila { get; set; }
-        public int CorrespondeciaParentesis { get; set; }
-        public int CorrespondeciaLlaves { get; set; }
+        public int CorrespondenciaParentesis { get; set; }
+        public int CorrespondenciaLlaves { get; set; }
         public List<Lexico.Error> ErroresSintacticos { get; set; }
         public List<Lexico.Error> ErroresSemanticos { get; set; }
         public List<Gramatica> Gramaticas { get; set; }
         public List<DerivacionEntrada> DerivacionesEntradas { get; set; }
+        public int CorrespondenciaInicioFin { get; set; }
         public void Recorrido(string[] tokens)
         {
             //Recibimos los tokens de la cadena de entrada
             List<string> pilaRaices = new List<string>();
             DerivacionesEntradas = new List<DerivacionEntrada>(); 
 
+
+            CorrespondenciaInicioFin = 0;
             Fila = tokens.Length;
             for (int i = tokens.Length - 1; i > -1; i--)
             {               
@@ -75,21 +78,28 @@ namespace Compilador.Sintactico
             }
             else
             {
-                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR10", Descripcion = "No se pudo derivar la pila de raices", Linea = 0 });
+                if (CorrespondenciaInicioFin != 0)
+                {
+                    ErroresSemanticos.Add(new Lexico.Error { Codigo = "ERROR10", Descripcion = "No existe un balance de Inicio o Fin del programa.", Linea = 0 });
+                }
+                else
+                {
+                    ErroresSemanticos.Add(new Lexico.Error { Codigo = "ERROR10", Descripcion = "No se pudo derivar la pila de raices", Linea = 0 });
+                }
                 throw new Exception();
 
             }
 
             //Al finalizar el recorrido de la cadena de entrada verificamos si existe un desbalance
             //con los parentesis y llaves que no fue detectado 
-            if (CorrespondeciaLlaves != 0)
+            if (CorrespondenciaLlaves != 0)
             {
-                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondeciaLlaves < 0 ? "{" : "}"), Linea = tokens.Length });
+                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondenciaLlaves < 0 ? "{" : "}"), Linea = tokens.Length });
             }
-            if (CorrespondeciaParentesis != 0)
+            if (CorrespondenciaParentesis != 0)
             {
 
-                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondeciaParentesis < 0 ? "(" : ")"), Linea = Fila });
+                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondenciaParentesis < 0 ? "(" : ")"), Linea = Fila });
             }           
 
             if (ErroresSintacticos.Count > 0)
@@ -113,25 +123,27 @@ namespace Compilador.Sintactico
                 entradaDerivada = entradaDerivada.Replace("  "," ");
             }
 
-            CorrespondeciaParentesis += Regex.Matches(entradaLinea,"CAES02").Count;
-            CorrespondeciaParentesis -= Regex.Matches(entradaLinea, "CAES13").Count;
+            CorrespondenciaParentesis += Regex.Matches(entradaLinea,"CAES02").Count;
+            CorrespondenciaParentesis -= Regex.Matches(entradaLinea, "CAES13").Count;
+            CorrespondenciaInicioFin += Regex.Matches(entradaLinea, "PR01").Count;
+            CorrespondenciaInicioFin -= Regex.Matches(entradaLinea, "PR02").Count;
 
-            Debug.WriteLine("CorresponednciaParentesis: "+CorrespondeciaParentesis);
-            if (CorrespondeciaParentesis != 0)
+            Debug.WriteLine("CorresponednciaParentesis: "+CorrespondenciaParentesis);
+            if (CorrespondenciaParentesis != 0)
             {
-                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondeciaParentesis < 0 ? "(" : ")"), Linea = Fila });
-                CorrespondeciaParentesis = 0;
+                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondenciaParentesis < 0 ? "(" : ")"), Linea = Fila });
+                CorrespondenciaParentesis = 0;
                 DerivacionesEntradas.Add(new DerivacionEntrada(entradaLinea) { Derivaciones = new List<string>() { "ERROR" } });
                 return "ERROR"; 
             }
 
-            CorrespondeciaLlaves += new Regex("CAES14").Matches(entradaLinea).Count;
-            CorrespondeciaLlaves -= new Regex("CAES15").Matches(entradaLinea).Count;
-            Debug.WriteLine("CorresponednciaLlaves: " + CorrespondeciaParentesis);
-            if (CorrespondeciaLlaves != 0)
+            CorrespondenciaLlaves += new Regex("CAES14").Matches(entradaLinea).Count;
+            CorrespondenciaLlaves -= new Regex("CAES15").Matches(entradaLinea).Count;
+            Debug.WriteLine("CorresponednciaLlaves: " + CorrespondenciaParentesis);
+            if (CorrespondenciaLlaves != 0)
             {
-                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondeciaLlaves < 0 ? "{" : "}"), Linea = 0 });
-                CorrespondeciaLlaves = 0;
+                ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR10", Descripcion = "Se esperaba un " + (CorrespondenciaLlaves < 0 ? "{" : "}"), Linea = 0 });
+                CorrespondenciaLlaves = 0;
                 DerivacionesEntradas.Add(new DerivacionEntrada(entradaLinea) { Derivaciones = new List<string>() { "ERROR" } });
                 return "ERROR";
             }          
