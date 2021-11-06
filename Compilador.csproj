@@ -122,6 +122,8 @@
     <None Include="CSV\Matriz.csv" />
     <None Include="Lexico\Ejemplos\Ejemplo1.rtf" />
     <None Include="Lexico\Ejemplos\EjemploDeclaraciones.rtf" />
+    <None Include="Lexico\Ejemplos\InstruccionesCiclos.rtf" />
+    <None Include="Lexico\Ejemplos\InstruccionesSeleccion.rtf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
