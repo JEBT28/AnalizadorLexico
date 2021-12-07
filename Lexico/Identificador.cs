@@ -2,7 +2,7 @@
 
 namespace Compilador.Lexico
 {
-    class Identificador : IEquatable<Identificador>
+    public class Identificador : IEquatable<Identificador>
     {
         public int Id { get; set; }
 
@@ -11,7 +11,7 @@ namespace Compilador.Lexico
         public String Tipo { get; set; }
 
         public string Valor { get; set; }
-
+        public int lineaDeclaracion { get; set; }
 
         public bool Equals(Identificador i)
         {

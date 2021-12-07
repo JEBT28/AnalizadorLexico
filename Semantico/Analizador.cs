@@ -5,8 +5,8 @@ namespace Compilador.Semantico
     {
 
         public void Pasadas()
-        { 
-        
+        {
+
             //Primera Pasada
 
 
@@ -18,7 +18,7 @@ namespace Compilador.Semantico
             //Tercera pasada
 
 
-        
+
 
         }
 

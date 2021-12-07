@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ensamblador\CodigoEnsamblador.cs" />
     <Compile Include="Lexico\Analizador.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +154,7 @@
     <None Include="Resources\066-plus.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ArchivosTemporales\program.asm" />
     <Content Include="ArchivosTemporales\Tokens.txt">
       <SubType>Form</SubType>
     </Content>

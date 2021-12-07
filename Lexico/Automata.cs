@@ -95,10 +95,10 @@ namespace Compilador.Lexico
         }
 
         //Funcion que valida que el identificador exista, si existe devuelve su numero, de lo contrario lo agrega 
-        public string ValidarIdentificador(string id,string tipo)
+        public string ValidarIdentificador(string id, string tipo, int lineaDeclaracion)
         {
 
-            Identificador identificador = new Identificador { Nombre = id };
+            Identificador identificador = new Identificador { Nombre = id.Trim() };
             if (TablaIdentificadores.Contains(identificador))
             {
                 identificador = TablaIdentificadores.ElementAt(TablaIdentificadores.IndexOf(identificador));
@@ -107,6 +107,7 @@ namespace Compilador.Lexico
             {
                 identificador.Id = TablaIdentificadores.Count + 1;
                 identificador.Tipo = tipo.Trim();
+                identificador.lineaDeclaracion = lineaDeclaracion;
                 TablaIdentificadores.Add(identificador);
             }
             string numIdentificador = $"{identificador.Id.ToString("00")}.{identificador.Tipo}";

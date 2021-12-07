@@ -16,7 +16,7 @@ namespace Compilador.Sintactico
             //Inicializamos la lista donde se almacenaran las entradas derivadas
             this.DerivacionesEntradas = new List<DerivacionEntrada>();
             this.ErroresSintacticos = new List<Lexico.Error>();
-            this.ErroresSemanticos = new List<Lexico.Error>();  
+            this.ErroresSemanticos = new List<Lexico.Error>();
             //Bloque para imprimir las gramaticas con su pila valida en el debugger
             foreach (var item in Gramaticas)
             {
@@ -37,20 +37,20 @@ namespace Compilador.Sintactico
         {
             //Recibimos los tokens de la cadena de entrada
             List<string> pilaRaices = new List<string>();
-            DerivacionesEntradas = new List<DerivacionEntrada>(); 
+            DerivacionesEntradas = new List<DerivacionEntrada>();
 
 
             CorrespondenciaInicioFin = 0;
             Fila = tokens.Length;
             for (int i = tokens.Length - 1; i > -1; i--)
-            {               
+            {
 
-                if (!String.IsNullOrWhiteSpace(tokens[i]) )
+                if (!String.IsNullOrWhiteSpace(tokens[i]))
                 {
                     if (tokens[i].Trim().Contains(' '))
                     {
                         //Realizamos el recorrido, pasando lo tokens obtenidos
-                        string resultado =  DerivarEntrada(entradaLinea: tokens[i]);
+                        string resultado = DerivarEntrada(entradaLinea: tokens[i]);
 
                         if (resultado.Equals("ERROR"))
                         {
@@ -66,7 +66,7 @@ namespace Compilador.Sintactico
                         pilaRaices.Add(tokens[i]);
                     }
                 }
-               
+
                 Fila--;
             }
 
@@ -100,14 +100,14 @@ namespace Compilador.Sintactico
             {
 
                 ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondenciaParentesis < 0 ? "(" : ")"), Linea = Fila });
-            }           
+            }
 
             if (ErroresSintacticos.Count > 0)
             {
                 Debug.WriteLine("Rechazada");
                 throw new Exception();
             }
-            
+
         }
 
         public string DerivarEntrada(string entradaLinea)
@@ -118,23 +118,23 @@ namespace Compilador.Sintactico
             entradaLinea = new Regex("CNR[0-9]{2}").Replace(entradaLinea, "CNR");
 
             string entradaDerivada = entradaLinea;
-            while (Regex.Matches( entradaDerivada,"  ").Count!=0)
+            while (Regex.Matches(entradaDerivada, "  ").Count != 0)
             {
-                entradaDerivada = entradaDerivada.Replace("  "," ");
+                entradaDerivada = entradaDerivada.Replace("  ", " ");
             }
 
-            CorrespondenciaParentesis += Regex.Matches(entradaLinea,"CAES02").Count;
+            CorrespondenciaParentesis += Regex.Matches(entradaLinea, "CAES02").Count;
             CorrespondenciaParentesis -= Regex.Matches(entradaLinea, "CAES13").Count;
             CorrespondenciaInicioFin += Regex.Matches(entradaLinea, "PR01").Count;
             CorrespondenciaInicioFin -= Regex.Matches(entradaLinea, "PR02").Count;
 
-            Debug.WriteLine("CorresponednciaParentesis: "+CorrespondenciaParentesis);
+            Debug.WriteLine("CorresponednciaParentesis: " + CorrespondenciaParentesis);
             if (CorrespondenciaParentesis != 0)
             {
                 ErroresSintacticos.Add(new Lexico.Error { Codigo = "ERROR09", Descripcion = "Se esperaba un " + (CorrespondenciaParentesis < 0 ? "(" : ")"), Linea = Fila });
                 CorrespondenciaParentesis = 0;
                 DerivacionesEntradas.Add(new DerivacionEntrada(entradaLinea) { Derivaciones = new List<string>() { "ERROR" } });
-                return "ERROR"; 
+                return "ERROR";
             }
 
             CorrespondenciaLlaves += new Regex("CAES14").Matches(entradaLinea).Count;
@@ -146,13 +146,13 @@ namespace Compilador.Sintactico
                 CorrespondenciaLlaves = 0;
                 DerivacionesEntradas.Add(new DerivacionEntrada(entradaLinea) { Derivaciones = new List<string>() { "ERROR" } });
                 return "ERROR";
-            }          
+            }
             DerivacionEntrada entrada = new DerivacionEntrada(entradaLinea);
             var pilaAD = "";
 
             bool control = true;
 
-            while ( control )
+            while (control)
             {
 
                 if (pilaAD.Equals(entradaDerivada) && !entradaDerivada.Trim().Equals("SENTENCIA"))
@@ -175,7 +175,7 @@ namespace Compilador.Sintactico
                             if (g.Raiz.Contains("ERROR"))
                             {
                                 var error = ListaErrores.Find(e => e.Codigo == g.Raiz);
-                                ErroresSemanticos.Add(new Lexico.Error { Codigo=error.Codigo,Descripcion=error.Descripcion,Linea = Fila });
+                                ErroresSemanticos.Add(new Lexico.Error { Codigo = error.Codigo, Descripcion = error.Descripcion, Linea = Fila });
                             }
                             pilaResultante = g.PilaValida.Replace(entradaDerivada, g.Raiz);
                             if (!entradaDerivada.Equals(pilaResultante))
@@ -185,7 +185,7 @@ namespace Compilador.Sintactico
                                 entrada.Derivaciones.Add(pilaResultante);
                                 entradaDerivada = pilaResultante;
                             }
-                        }                        
+                        }
                     }
                 }
 
@@ -205,8 +205,8 @@ namespace Compilador.Sintactico
                 {
                     control = true;
                 }
-               
-               
+
+
             }
 
             DerivacionesEntradas.Add(entrada);

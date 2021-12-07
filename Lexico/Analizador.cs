@@ -223,7 +223,7 @@ namespace Compilador.Lexico
                         //El token es un identificador
                         else if (result.Contains("ID"))
                         {
-                            result += miAutomata.ValidarIdentificador(fragmentoEvaluado, fragmentoAnterior);
+                            result += miAutomata.ValidarIdentificador(fragmentoEvaluado, fragmentoAnterior, fila);
 
                             AgregarToken(result + " ", Color.Black);
                         }
@@ -250,6 +250,15 @@ namespace Compilador.Lexico
                     else
                     {
                         auxColumna++;
+                    }
+                }
+
+                foreach (var iden in miAutomata.TablaIdentificadores)
+                {
+                    string linea = cadena.Split('\n')[iden.lineaDeclaracion - 1];
+                    if (linea.Contains("="))
+                    {
+                        iden.Valor = linea.Substring(linea.IndexOf('=') + 1).Trim();
                     }
                 }
             }
@@ -286,6 +295,9 @@ namespace Compilador.Lexico
 
                 AnalisisSintacticoSemantico(rtxtTokens.Text.Split('\n'));
 
+                EscribirArchivosTemporales($"{rutaBase}ArchivosTemporales\\program.asm", GenerarArchivoEnsamblador(rtxtCodigo.Text, miAutomata.TablaIdentificadores));
+
+
             }
 
             //Rutina que muestra la tabla de identificadores
@@ -299,8 +311,27 @@ namespace Compilador.Lexico
             {
                 dgvTablaCN.Rows.Add(cn.Id.ToString("00"), cn.Valor, cn.NumeroOperador, cn.Jerarquia);
             }
+
+
+
         }
 
+        private string GenerarArchivoEnsamblador(string codigo, List<Identificador> tablaidentificadores)
+        {
+            string[] Lineas = codigo.Split('\n');
+
+            Ensamblador.CodigoEnsamblador generador = new Ensamblador.CodigoEnsamblador(TablaIdentificadores: tablaidentificadores);
+
+            foreach (string linea in Lineas)
+            {
+                if (!String.IsNullOrWhiteSpace(linea.Trim()))
+                {
+                    generador.AgregarInstruccion(linea);
+                }
+            }
+
+            return generador.CodigoASM;
+        }
 
         public void AnalisisSintacticoSemantico(string[] tokensEntrada)
         {
@@ -312,12 +343,10 @@ namespace Compilador.Lexico
                 miAnalizadorBUP.Recorrido(tokensEntrada);
 
                 tpgErroresSintacticos.Text = $"Lista de errores sintacticos";
-                
-      
 
                 dgvListaErrores.Rows.Clear();
                 dgvErroresSintacticos.Rows.Clear();
-                
+
                 rtxtSalida.Text = "El analizador termino la tarea con exito y sin errores.";
 
                 if (miAnalizadorBUP.ErroresSemanticos.Count > 0)
