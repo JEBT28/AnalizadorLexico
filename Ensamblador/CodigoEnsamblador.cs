@@ -23,6 +23,7 @@ namespace Compilador.Ensamblador
             Si = false;
             mientras = false;
             Entonces = false;
+            hacer = false;
             parLlaves = 0;
             auxCodigo = "";
         }
@@ -34,13 +35,16 @@ namespace Compilador.Ensamblador
         public List<Lexico.Identificador> TablaIdentificadores { get; set; }
 
         public bool Si { get; set; }
-        public bool Entonces { get; set; } 
+        public bool Entonces { get; set; }
 
         public string controlInstruccion { get; set; }
 
         public int siContador { set; get; }
+        public int mientrasContador { get; set; }
+        public int hacerContador { get; set; }
 
         public bool mientras { get; set; }
+        public bool hacer { get; set; }
 
         public int parLlaves { get; set; }
         public void AgregarInstruccion(string cadena)
@@ -62,16 +66,28 @@ namespace Compilador.Ensamblador
                         auxCodigo += $"jmp cont{siContador}\n\n";
                         Entonces = true;
                     }
+                    else if (cadena.Contains("Romper"))
+                    {
+                        if (mientras)
+                        {
+                            auxCodigo += $"jmp contMient{mientrasContador}";
+                        }
+                        else if (hacer)
+                        {
+                            auxCodigo += $"jmp contHacer{hacerContador}";
+                        }
+
+                    }
                     else
                     {
                         Debug.WriteLine("Operacion dentro de if");
                         auxCodigo += ConvertirInstruccion(cadena);
                         Debug.WriteLine(auxCodigo);
                     }
-                }                
+                }
             }
 
-            else if(Si && Entonces)
+            else if (Si && Entonces)
             {
                 if (cadena.Trim().Equals("{"))
                 {
@@ -105,7 +121,7 @@ namespace Compilador.Ensamblador
                                 cmp = $"mov al,{destino}\n" +
                                   $"mov bl, {fuente}\n" +
                                   $"cmp al, bl \n";
-                               
+
 
                             }
                             else
@@ -162,11 +178,10 @@ namespace Compilador.Ensamblador
 
                         CodigoASM += auxCodigo + $"cont{siContador}:\n";
                         Si = false;
-                        mientras = false;
+                        Entonces = false;
                         parLlaves = 0;
-                        auxCodigo = "";
                     }
-                   
+
                 }
                 else
                 {
@@ -175,10 +190,219 @@ namespace Compilador.Ensamblador
                     Debug.WriteLine(auxCodigo);
                 }
             }
+            else if (mientras)
+            {
+                if (cadena.Trim().Equals("{"))
+                {
+                    Debug.WriteLine("Escribo while");
+                    parLlaves++;
+
+                }
+                else if (cadena.Trim().Equals("}"))
+                {
+                    Debug.WriteLine("Cierro mientras");
+                    parLlaves--;
+                    if (parLlaves == 0)
+                    {
+                        int inicioCondicion = controlInstruccion.Split(' ').ToList().IndexOf("(");
+                        string[] tokens = controlInstruccion.Split(' ');
+
+                        string destino = tokens[inicioCondicion + 1];
+
+                        string fuente = tokens[inicioCondicion + 3];
+
+                        string op = tokens[inicioCondicion + 2];
+
+                        string cmp = "";
+
+                        if (new Regex("[a-z]{1}[a-zA-Z]*").IsMatch(destino))
+                        {
+                            if (new Regex("[a-z]{1}[a-zA-Z]*").IsMatch(fuente))
+                            {
+
+                                cmp = $"mov al,{destino}\n" +
+                                  $"mov bl, {fuente}\n" +
+                                  $"cmp al, bl \n";
+
+
+                            }
+                            else
+                            {
+                                cmp = $"mov al,{destino}\n" +
+                                  $"mov bl, {ConversionDec2Hex(int.Parse(fuente.Trim()))}\n" +
+                                  $"cmp al, bl \n";
+
+                            }
+
+                        }
+                        else
+                        {
+                            if (new Regex("[a-z]{1}[a-zA-Z]*").IsMatch(fuente))
+                            {
+
+                                cmp = $"mov al, {ConversionDec2Hex(int.Parse(destino.Trim()))}\n" +
+                                    $"mov bl, {fuente}\n" +
+                                    $"cmp al, bl \n";
+
+                            }
+                            else
+                            {
+                                cmp = $"mov al, {ConversionDec2Hex(int.Parse(destino.Trim()))}\n" +
+                                  $"mov bl, {ConversionDec2Hex(int.Parse(fuente.Trim()))}\n" +
+                                  $"cmp al, bl \n";
+
+                            }
+                        }
+
+
+                        switch (op)
+                        {
+                            case ">":
+                                auxCodigo = $"jmp mientras{mientrasContador}\n\n\nmientras{mientrasContador}:\n" + cmp + $"JLE contMient{mientrasContador} \n" + auxCodigo;
+
+                                break;
+                            case "<":
+                                auxCodigo = $"jmp mientras{mientrasContador}\n\n\nmientras{mientrasContador}:\n" + cmp + $"JGE contMient{mientrasContador} \n" + auxCodigo;
+                                break;
+                            case "<=":
+                                auxCodigo = $"jmp mientras{mientrasContador}\n\n\nmientras{mientrasContador}:\n" + cmp + $"JG contMient{mientrasContador} \n" + auxCodigo;
+                                break;
+                            case ">=":
+                                auxCodigo = $"jmp mientras{mientrasContador}\n\n\nmientras{mientrasContador}:\n" + cmp + $"JL contMient{mientrasContador} \n" + auxCodigo;
+                                break;
+                            case "==":
+                                auxCodigo = $"jmp mientras{mientrasContador}\n\n\nmientras{mientrasContador}:\n" + cmp + $"JNE contMient{mientrasContador} \n" + auxCodigo;
+                                break;
+                            case "<>":
+                                auxCodigo = $"jmp mientras{mientrasContador}\n\n\nmientras{mientrasContador}:\n" + cmp + $"JE contMient{mientrasContador} \n" + auxCodigo;
+                                break;
+                        }
+
+                        CodigoASM += auxCodigo + $"jmp mientras{mientrasContador} \n\n\ncontMient{mientrasContador}:\n";
+                        Si = false;
+                        mientras = false;
+                        parLlaves = 0;
+                        auxCodigo = "";
+                    }
+
+                }
+            }
+            else if (hacer)
+            {
+                if (cadena.Trim().Equals("{"))
+                {
+                    Debug.WriteLine("Escribo do");
+                    parLlaves++;
+                    auxCodigo = $"jmp hacer{mientrasContador}\n\n\nhacer{mientrasContador}:\n";
+
+                }
+                else if (cadena.Trim().Equals("}"))
+                {
+                    Debug.WriteLine("Cierro do");
+                    parLlaves--;
+                }
+                else if (cadena.Contains("Mientras"))
+                {
+                    if (parLlaves == 0)
+                    {
+
+                        controlInstruccion = cadena;
+                        int inicioCondicion = controlInstruccion.Split(' ').ToList().IndexOf("(");
+                        string[] tokens = controlInstruccion.Split(' ');
+
+                        string destino = tokens[inicioCondicion + 1];
+
+                        string fuente = tokens[inicioCondicion + 3];
+
+                        string op = tokens[inicioCondicion + 2];
+
+                        string cmp = "";
+
+                        if (new Regex("[a-z]{1}[a-zA-Z]*").IsMatch(destino))
+                        {
+                            if (new Regex("[a-z]{1}[a-zA-Z]*").IsMatch(fuente))
+                            {
+
+                                cmp = $"mov al,{destino}\n" +
+                                  $"mov bl, {fuente}\n" +
+                                  $"cmp al, bl \n";
+
+
+                            }
+                            else
+                            {
+                                cmp = $"mov al,{destino}\n" +
+                                  $"mov bl, {ConversionDec2Hex(int.Parse(fuente.Trim()))}\n" +
+                                  $"cmp al, bl \n";
+
+                            }
+
+                        }
+                        else
+                        {
+                            if (new Regex("[a-z]{1}[a-zA-Z]*").IsMatch(fuente))
+                            {
+
+                                cmp = $"mov al, {ConversionDec2Hex(int.Parse(destino.Trim()))}\n" +
+                                    $"mov bl, {fuente}\n" +
+                                    $"cmp al, bl \n";
+
+                            }
+                            else
+                            {
+                                cmp = $"mov al, {ConversionDec2Hex(int.Parse(destino.Trim()))}\n" +
+                                  $"mov bl, {ConversionDec2Hex(int.Parse(fuente.Trim()))}\n" +
+                                  $"cmp al, bl \n";
+
+                            }
+                        }
+
+
+
+                        switch (op)
+                        {
+                            case ">":
+                                cmp += $"JLE contHacer{hacerContador} \n";
+
+                                break;
+                            case "<":
+                                cmp += $"JGE contHacer{hacerContador} \n";
+                                break;
+                            case "<=":
+                                cmp += $"JG contHacer{hacerContador} \n";
+                                break;
+                            case ">=":
+                                cmp += $"JL contHacer{hacerContador} \n";
+                                break;
+                            case "==":
+                                cmp += $"JNE contHacer{hacerContador} \n";
+                                break;
+                            case "<>":
+                                cmp += $"JE contHacer{hacerContador} \n";
+                                break;
+                        }
+
+                        CodigoASM += auxCodigo + cmp + $"jmp hacer{hacerContador} \n\n\ncontHacer{hacerContador}:\n";
+                        hacer = false;
+                        parLlaves = 0;
+                        auxCodigo = "";
+                    }
+
+                }
+                else
+                {
+                    Debug.WriteLine("Operacion dentro de while");
+                    auxCodigo += ConvertirInstruccion(cadena);
+                    Debug.WriteLine(auxCodigo);
+                }
+            }
             else
             {
+
+                Debug.WriteLine("Agregar linea");
                 CodigoASM += ConvertirInstruccion(cadena);
             }
+            
         }
 
         private string ConvertirInstruccion(string cadena)
@@ -202,7 +426,7 @@ namespace Compilador.Ensamblador
                 if (new Regex("\\(\\s[a-z]{1}[a-zA-Z0-9]*\\s\\)").Matches(cadena.Trim()).Count > 0)
                 {
                     Debug.WriteLine("Imprimir ID");
-                    string aux = cadena.Split(' ')[cadena.Split(' ').ToList().IndexOf("(")+1];
+                    string aux = cadena.Split(' ')[cadena.Split(' ').ToList().IndexOf("(") + 1];
 
                     Lexico.Identificador iden = TablaIdentificadores.Where(i => i.Nombre == aux).FirstOrDefault();
 
@@ -216,7 +440,7 @@ namespace Compilador.Ensamblador
                     {
                         if (iden.Tipo == "Ent")
                         {
-                            return "mov al, " + iden.Nombre + "\naam\nadd ax, 3030h\npush ax\nmov dl, ah\nmov ah, 02h\nint 21h\npop dx\nmov ah, 02h\nint 21h\n";
+                            return "mov al, " + iden.Nombre + "\naam\nadd ax, 3030h\npush ax\nmov dl, ah\nmov ah, 02h\nint 21h\npop dx\nmov ah, 02h\nint 21h\n MOV DL,13\nINT 21h\nMOV DL,10\n INT 21h\n";
                         }
                         else
                         {
@@ -287,6 +511,106 @@ namespace Compilador.Ensamblador
                 Si = true;
                 controlInstruccion = cadena;
             }
+            else if (cadena.Contains("Mientras"))
+            {
+                mientras = true;
+                controlInstruccion = cadena;
+                auxCodigo = "";
+            }
+            else if (cadena.Contains("Hacer"))
+            {
+                hacer = true;
+                auxCodigo = "";
+            }
+            else if (new Regex("([a-z]{1}[a-zA-Z0-9]*)\\s=\\s([a-z]{1}[a-zA-Z0-9]*|[0-9]+|\"[a-zA-Z0-9]*\")+(\\s(|\\+|-|\\/|\\*|){1}\\s([a-z]{1}[a-zA-Z0-9]*|[0-9]+|\"[a-zA-Z0-9]*\")+)*").Matches(cadena).Count > 0)
+            {
+                Debug.WriteLine("Asignacion");
+                string[] tokens = cadena.Trim().Split(' ');
+                int tokenAsignacion = tokens.ToList().IndexOf("=");
+
+                if (tokenAsignacion - 2 >= 0 && new Regex("(Ent|Bool|Flot|Cade|Car)").IsMatch(tokens[tokenAsignacion - 2]))
+                {
+                    return "";
+                }
+
+                string codigo = "";
+
+                for (int i = tokenAsignacion + 1; i < tokens.Length; i++)
+                {
+                    if (tokenAsignacion + 1 == tokens.Length)
+                    {
+                        if (new Regex("[a-z]{1}[a-zA-Z0-9]*").IsMatch(tokens[i]))
+                        {
+                            return $"mov {tokens[0]}, {tokens[i]}\n";
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Asignar numero");
+                            return $"mov {tokens[0]}, {ConversionDec2Hex(int.Parse(tokens[i]))}\n";
+                        }
+                    }
+                    else
+                    {
+                        if (new Regex("[a-z]{1}[a-zA-Z0-9]*").IsMatch(tokens[i]))
+                        {
+                            codigo += $"mov al, {tokens[i]}\n";
+                        }
+                        else if (new Regex("[0-9]+").IsMatch(tokens[i]))
+                        {
+                            codigo += $"mov al, {ConversionDec2Hex(int.Parse(tokens[i]))}\n";
+                        }
+                        else if (new Regex("(\\+|-|/|\\*)").IsMatch(tokens[i]))
+                        {
+                            switch (tokens[i])
+                            {
+
+                                case "+":
+                                    codigo += $"ADC al, "; if (new Regex("[a-z]{1}[a-zA-Z0-9]*").IsMatch(tokens[i] + 1))
+                                    {
+                                        codigo += $"{tokens[i + 1]}\n";
+                                    }
+                                    else if (new Regex("[0-9]+").IsMatch(tokens[i + 1]))
+                                    {
+                                        codigo += $"{ConversionDec2Hex(int.Parse(tokens[i + 1]))}\n";
+                                    }; break;
+                                case "-":
+                                    codigo += $"SBB al, ";
+                                    if (new Regex("[a-z]{1}[a-zA-Z0-9]*").IsMatch(tokens[i] + 1))
+                                    {
+                                        codigo += $"{tokens[i + 1]}\n";
+                                    }
+                                    else if (new Regex("[0-9]+").IsMatch(tokens[i + 1]))
+                                    {
+                                        codigo += $"{ConversionDec2Hex(int.Parse(tokens[i + 1]))}\n";
+                                    }
+                                    break;
+                                case "/":
+                                    if (new Regex("[a-z]{1}[a-zA-Z0-9]*").IsMatch(tokens[i] + 1))
+                                    {
+                                        codigo += $"mov bl, {tokens[i + 1]}\n";
+                                    }
+                                    else if (new Regex("[0-9]+").IsMatch(tokens[i + 1]))
+                                    {
+                                        codigo += $"mov bl, {ConversionDec2Hex(int.Parse(tokens[i + 1]))}\n";
+                                    }
+                                    codigo += $"DIV bl \n"; break;
+                                case "*":
+                                    if (new Regex("[a-z]{1}[a-zA-Z0-9]*").IsMatch(tokens[i] + 1))
+                                    {
+                                        codigo += $"mov bl, {tokens[i + 1]}\n";
+                                    }
+                                    else if (new Regex("[0-9]+").IsMatch(tokens[i + 1]))
+                                    {
+                                        codigo += $"mov bl, {ConversionDec2Hex(int.Parse(tokens[i + 1]))}\n";
+                                    }
+                                    codigo += $"MUL bl \n"; break;
+                            }
+                            i++;
+                        }
+                    }
+                }
+                return codigo + $"mov {tokens[0]}, al\n";
+            }
             return "";
         }
 
@@ -299,21 +623,21 @@ namespace Compilador.Ensamblador
                 {
                     if (identificador.Tipo.Equals("Ent") || identificador.Tipo.Equals("Flot"))
                     {
-                        varAux = varAux + " " + ConversionDec2Hex(int.Parse(identificador.Valor)) + "h";
+                        varAux += " " + ConversionDec2Hex(int.Parse(identificador.Valor));
                     }
                     else if (identificador.Tipo.Equals("Cade") || identificador.Tipo.Equals("Car"))
                     {
-                        varAux = varAux + " 0DH,0AH, " + identificador.Valor + ",'$'";
+                        varAux += " 0DH,0AH, " + identificador.Valor + ",'$'";
                     }
                     else if (identificador.Tipo.Equals("Bool"))
                     {
                         if (identificador.Valor.Equals("Verdad"))
                         {
-                            varAux = varAux + " 1d";
+                            varAux += " 1d";
                         }
                         else
                         {
-                            varAux = varAux + " 0d";
+                            varAux += " 0d";
                         }
                     }
                 }
@@ -321,11 +645,11 @@ namespace Compilador.Ensamblador
                 {
                     if (identificador.Tipo == "Cade")
                     {
-                        varAux = varAux + " 255 DUP ('$')";
+                        varAux += " 255 DUP ('$')";
                     }
                     else
                     {
-                        varAux = varAux + " ?";
+                        varAux += " ?";
                     }
                 }
                 CodigoASM += $"{ varAux}\n";
@@ -337,7 +661,11 @@ namespace Compilador.Ensamblador
         private string ConversionDec2Hex(int numero)
         {
             string hex = numero.ToString("X");
-            return hex.Length < 2 ? "0" + hex : hex;
+            if (!(hex[hex.Length - 1] == 'h' || hex[hex.Length - 1] == 'H'))
+            {
+                hex += 'h';
+            }
+            return hex.Length < 3 ? "0" + hex : hex;
 
         }
 

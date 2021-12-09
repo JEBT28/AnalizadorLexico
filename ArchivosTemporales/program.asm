@@ -1,35 +1,39 @@
 code segment
 assume cs:code, ds:code, ss:code
 org 100h
-num1 db 0Eh
-num2 db 0Eh
-msg1 db 0DH,0AH, "Son iguales",'$'
-msg2 db 0DH,0AH, "No son iguales",'$'
+a db 00h
 main proc
 mov ax,cs
 mov ds,ax
-mov al,num1
-mov bl, num2
+jmp hacer0
+
+
+hacer0:
+mov al, a
+aam
+add ax, 3030h
+push ax
+mov dl, ah
+mov ah, 02h
+int 21h
+pop dx
+mov ah, 02h
+int 21h
+ MOV DL,13
+INT 21h
+MOV DL,10
+ INT 21h
+mov al, a
+ADC al, 01h
+mov a, al
+mov al,a
+mov bl, 0Ah
 cmp al, bl 
-JE si0 
-JNE sino0 
+JGE contHacer0 
+jmp hacer0 
 
 
-si0:
-lea dx,msg1
-mov ah,09h
-int 21h
-jmp cont0
-
-
-
-sino0:
-lea dx,msg2
-mov ah,09h
-int 21h
-jmp cont0
-
-cont0:
+contHacer0:
 mov ah,08
 int 21h
 main endp

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -318,12 +319,15 @@ namespace Compilador.Lexico
 
         private string GenerarArchivoEnsamblador(string codigo, List<Identificador> tablaidentificadores)
         {
+            Debug.WriteLine("Genero codigo");
+
             string[] Lineas = codigo.Split('\n');
 
             Ensamblador.CodigoEnsamblador generador = new Ensamblador.CodigoEnsamblador(TablaIdentificadores: tablaidentificadores);
 
             foreach (string linea in Lineas)
             {
+                Debug.WriteLine("Recorro codigo");
                 if (!String.IsNullOrWhiteSpace(linea.Trim()))
                 {
                     generador.AgregarInstruccion(linea);
