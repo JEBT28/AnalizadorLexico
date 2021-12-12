@@ -543,10 +543,22 @@ namespace Compilador.Ensamblador
                         {
                             return $"mov {tokens[0]}, {tokens[i]}\n";
                         }
-                        else
+                        else if (new Regex("[0-9]+").IsMatch(tokens[i]))
                         {
                             Debug.WriteLine("Asignar numero");
                             return $"mov {tokens[0]}, {ConversionDec2Hex(int.Parse(tokens[i]))}\n";
+                        }
+                        else if (new Regex("(Verdad|Falso)").IsMatch(tokens[i]))
+                        {
+                            if (tokens[i].Contains("Verdad"))
+                            {
+                                return $"mov {tokens[0]}, {ConversionDec2Hex(1)}\n";
+                            }
+                            else
+                            {
+                                return $"mov {tokens[0]}, {ConversionDec2Hex(0)}\n";
+                            }
+                        
                         }
                     }
                     else
@@ -633,11 +645,11 @@ namespace Compilador.Ensamblador
                     {
                         if (identificador.Valor.Equals("Verdad"))
                         {
-                            varAux += " 1d";
+                            varAux += " 1h";
                         }
                         else
                         {
-                            varAux += " 0d";
+                            varAux += " 0h";
                         }
                     }
                 }
